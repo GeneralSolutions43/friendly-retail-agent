@@ -16,7 +16,7 @@ services:
   backend:
     build: ./backend
     ports:
-      - "0.0.0.0:8000:8000"
+      - "0.0.0.0:8002:8002"
     environment:
       DATABASE_URL: postgresql://user:password@db:5432/retail_agent
     depends_on:
@@ -26,9 +26,9 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "0.0.0.0:3000:3000"
+      - "0.0.0.0:3002:3002"
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8000
+      NEXT_PUBLIC_API_URL: http://localhost:8002
 
 volumes:
   postgres_data:

@@ -10,7 +10,7 @@ RUN uv sync --frozen --no-dev
 COPY . .
 
 # Expose the port
-EXPOSE 8000
+EXPOSE 8002
 
 # Command to run the application
-CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8002"]
