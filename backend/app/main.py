@@ -1,10 +1,11 @@
 """Main entry point for the FastAPI backend application."""
 
 import os
-from typing import List, Generator
+from typing import List, Generator, Literal
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, Query
 from sqlmodel import Session, select, create_engine, SQLModel
+from pydantic import BaseModel
 from backend.app.models import Product
 
 
@@ -20,6 +21,18 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+
+class ChatRequest(BaseModel):
+    """Request model for chat endpoint."""
+    message: str
+    tone: Literal["Helpful Professional", "Friendly Assistant", "Expert Consultant"]
+
+
+class ChatResponse(BaseModel):
+    """Response model for chat endpoint."""
+    response: str
+    tone: str
 
 
 def get_session() -> Generator[Session, None, None]:
@@ -58,3 +71,33 @@ def search_products(
     )
     products = session.exec(statement).all()
     return products
+
+
+@app.post("/chat", response_model=ChatResponse)
+def chat_endpoint(request: ChatRequest):
+    """Handle chat messages with configurable personality/tone.
+
+    Args:
+        request (ChatRequest): The incoming chat request.
+
+    Returns:
+        ChatResponse: The agent's response.
+    """
+    # Mocked logic for now
+    if request.tone == "Helpful Professional":
+        response_text = (
+            f"I have received your message: '{request.message}'. "
+            "How may I assist you further?"
+        )
+    elif request.tone == "Friendly Assistant":
+        response_text = (
+            f"Hey there! Got your message: '{request.message}'. "
+            "Let me know what you need!"
+        )
+    else:  # Expert Consultant
+        response_text = (
+            f"I have analyzed your input: '{request.message}'. "
+            "Here are my recommendations."
+        )
+
+    return ChatResponse(response=response_text, tone=request.tone)
