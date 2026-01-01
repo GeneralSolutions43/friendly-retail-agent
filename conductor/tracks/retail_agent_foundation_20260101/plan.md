@@ -13,7 +13,7 @@
 - [x] Task: Conductor - User Manual Verification 'Backend Core & Database' (Protocol in workflow.md)
 
 ## Phase 3: Frontend Chat Interface
-- [ ] Task: Build core chat components (MessageList, ChatInput)
+- [x] Task: Build core chat components (MessageList, ChatInput) 26dbce5
 - [ ] Task: Implement API integration for real-time messaging
 - [ ] Task: Add UI for selecting agent personality/tone
 - [ ] Task: Conductor - User Manual Verification 'Frontend Chat Interface' (Protocol in workflow.md)
