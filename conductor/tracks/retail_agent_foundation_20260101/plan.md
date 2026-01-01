@@ -7,7 +7,7 @@
 - [x] Task: Conductor - User Manual Verification 'Project Scaffolding' (Protocol in workflow.md)
 
 ## Phase 2: Backend Core & Database
-- [ ] Task: Define PostgreSQL schema for products and seed initial data
+- [x] Task: Define PostgreSQL schema for products and seed initial data 6a05a44
 - [ ] Task: Implement Product Search Service in FastAPI
 - [ ] Task: Create Chat API endpoint with personality/tone support
 - [ ] Task: Conductor - User Manual Verification 'Backend Core & Database' (Protocol in workflow.md)
