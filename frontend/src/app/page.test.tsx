@@ -45,4 +45,34 @@ describe('Page Chat Integration', () => {
       })
     )
   })
+
+  it('sends the correct tone when changed', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ response: 'Expert advice', tone: 'Expert Consultant' }),
+    })
+
+    render(<Page />)
+    
+    const select = screen.getByLabelText(/Tone:/i)
+    fireEvent.change(select, { target: { value: 'Expert Consultant' } })
+    
+    const input = screen.getByPlaceholderText(/Type your message.../i)
+    const button = screen.getByRole('button', { name: /Send/i })
+    
+    fireEvent.change(input, { target: { value: 'What is your advice?' } })
+    fireEvent.click(button)
+    
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/chat'),
+        expect.objectContaining({
+          body: JSON.stringify({
+            message: 'What is your advice?',
+            tone: 'Expert Consultant'
+          })
+        })
+      )
+    })
+  })
 })
