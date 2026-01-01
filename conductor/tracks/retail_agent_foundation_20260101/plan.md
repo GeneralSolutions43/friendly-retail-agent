@@ -1,0 +1,19 @@
+# Plan: Retail Agent Foundation
+
+## Phase 1: Project Scaffolding
+- [ ] Task: Initialize Next.js frontend with TypeScript and Tailwind CSS
+- [ ] Task: Initialize FastAPI backend with basic health check endpoint
+- [ ] Task: Configure Docker Compose for local development (Frontend, Backend, PostgreSQL)
+- [ ] Task: Conductor - User Manual Verification 'Project Scaffolding' (Protocol in workflow.md)
+
+## Phase 2: Backend Core & Database
+- [ ] Task: Define PostgreSQL schema for products and seed initial data
+- [ ] Task: Implement Product Search Service in FastAPI
+- [ ] Task: Create Chat API endpoint with personality/tone support
+- [ ] Task: Conductor - User Manual Verification 'Backend Core & Database' (Protocol in workflow.md)
+
+## Phase 3: Frontend Chat Interface
+- [ ] Task: Build core chat components (MessageList, ChatInput)
+- [ ] Task: Implement API integration for real-time messaging
+- [ ] Task: Add UI for selecting agent personality/tone
+- [ ] Task: Conductor - User Manual Verification 'Frontend Chat Interface' (Protocol in workflow.md)
