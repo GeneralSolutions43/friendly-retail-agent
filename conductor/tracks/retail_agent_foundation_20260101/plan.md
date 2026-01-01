@@ -3,7 +3,7 @@
 ## Phase 1: Project Scaffolding
 - [x] Task: Initialize Next.js frontend with TypeScript and Tailwind CSS 7854529
 - [x] Task: Initialize FastAPI backend with basic health check endpoint 5ba6b20
-- [ ] Task: Configure Docker Compose for local development (Frontend, Backend, PostgreSQL)
+- [x] Task: Configure Docker Compose for local development (Frontend, Backend, PostgreSQL) 957239b
 - [ ] Task: Conductor - User Manual Verification 'Project Scaffolding' (Protocol in workflow.md)
 
 ## Phase 2: Backend Core & Database
