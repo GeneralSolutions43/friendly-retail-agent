@@ -25,12 +25,14 @@ app = FastAPI(lifespan=lifespan)
 
 class ChatRequest(BaseModel):
     """Request model for chat endpoint."""
+
     message: str
     tone: Literal["Helpful Professional", "Friendly Assistant", "Expert Consultant"]
 
 
 class ChatResponse(BaseModel):
     """Response model for chat endpoint."""
+
     response: str
     tone: str
 
@@ -53,8 +55,7 @@ async def health_check() -> dict[str, str]:
 
 @app.get("/products/search", response_model=List[Product])
 def search_products(
-    query: str = Query(..., min_length=1),
-    session: Session = Depends(get_session)
+    query: str = Query(..., min_length=1), session: Session = Depends(get_session)
 ) -> List[Product]:
     """Search for products by name or description.
 
@@ -66,8 +67,7 @@ def search_products(
         List[Product]: A list of products matching the query.
     """
     statement = select(Product).where(
-        (Product.name.contains(query)) |
-        (Product.description.contains(query))
+        (Product.name.contains(query)) | (Product.description.contains(query))
     )
     products = session.exec(statement).all()
     return products
