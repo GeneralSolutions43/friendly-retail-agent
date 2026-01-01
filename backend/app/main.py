@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, Query
 from sqlmodel import Session, select, create_engine, SQLModel
 from pydantic import BaseModel
-from backend.app.models import Product
+from .models import Product
 
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
