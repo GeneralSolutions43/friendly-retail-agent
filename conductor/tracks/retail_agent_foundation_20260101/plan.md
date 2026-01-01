@@ -14,6 +14,6 @@
 
 ## Phase 3: Frontend Chat Interface
 - [x] Task: Build core chat components (MessageList, ChatInput) 26dbce5
-- [ ] Task: Implement API integration for real-time messaging
+- [x] Task: Implement API integration for real-time messaging 07bc175
 - [ ] Task: Add UI for selecting agent personality/tone
 - [ ] Task: Conductor - User Manual Verification 'Frontend Chat Interface' (Protocol in workflow.md)
