@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 
 interface ChatInputProps {
-  onSendMessage: (message: str) => void
+  onSendMessage: (message: string) => void
   disabled?: boolean
 }
 
@@ -26,7 +26,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled }) => {
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Type your message..."
         disabled={disabled}
-        className="flex-1 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-black"
+        className="flex-1 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-black text-zinc-900 placeholder:text-zinc-500"
       />
       <button
         type="submit"

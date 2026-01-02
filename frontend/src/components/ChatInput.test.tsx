@@ -16,4 +16,12 @@ describe('ChatInput', () => {
     expect(onSendMessage).toHaveBeenCalledWith('Hello')
     expect(input).toHaveValue('')
   })
+
+  it('has the correct styling for text and placeholder', () => {
+    render(<ChatInput onSendMessage={jest.fn()} />)
+    const input = screen.getByPlaceholderText(/Type your message.../i)
+    
+    expect(input).toHaveClass('text-zinc-900')
+    expect(input).toHaveClass('placeholder:text-zinc-500')
+  })
 })

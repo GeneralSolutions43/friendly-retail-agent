@@ -5,7 +5,9 @@ import React from 'react'
 
 // Mock ErudaProvider
 jest.mock('@/components/ErudaProvider', () => {
-  return ({ children }: { children: React.ReactNode }) => <div data-testid="eruda-provider">{children}</div>
+  const MockErudaProvider = ({ children }: { children: React.ReactNode }) => <div data-testid="eruda-provider">{children}</div>
+  MockErudaProvider.displayName = 'MockErudaProvider'
+  return MockErudaProvider
 })
 
 describe('RootLayout', () => {
