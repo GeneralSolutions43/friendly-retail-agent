@@ -1,0 +1,8 @@
+{
+  "track_id": "improve_chat_input_visibility_20260101",
+  "type": "bug",
+  "status": "new",
+  "created_at": "2026-01-01T23:30:00Z",
+  "updated_at": "2026-01-01T23:30:00Z",
+  "description": "The color of the text in the input field of the frontend is difficult to see. It is too light."
+}

@@ -12,5 +12,5 @@ COPY . .
 # Expose port
 EXPOSE 3002
 
-# Run in development mode (attempting to disable turbopack if it is default, or just run dev)
-CMD ["npm", "run", "dev", "--", "--turbo=false"]
+# Run in development mode
+CMD ["sh", "-c", "rm -rf .next && npm run dev"]

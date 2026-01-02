@@ -17,7 +17,7 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 ENV HOSTNAME="0.0.0.0"
 
 COPY --from=builder /app/public ./public
