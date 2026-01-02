@@ -1,0 +1,87 @@
+# Dependencies
+node_modules/
+.venv/
+env/
+venv/
+ENV/
+bin/
+lib/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Next.js
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# Testing
+.pytest_cache/
+**/__pycache__/
+.coverage
+htmlcov/
+frontend/coverage/
+.tox/
+.nox/
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Database
+*.db
+*.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Conductor specific
+# (Optional: ignore conductor logs if any)
+
+# Next.js specific from frontend/.gitignore
+frontend/.pnp
+frontend/.pnp.*
+frontend/.yarn/*
+!frontend/.yarn/patches
+!frontend/.yarn/plugins
+!frontend/.yarn/releases
+!frontend/.yarn/versions
+frontend/.vercel
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
