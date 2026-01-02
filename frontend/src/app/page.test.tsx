@@ -75,4 +75,13 @@ describe('Page Chat Integration', () => {
       )
     })
   })
+
+  it('has the correct styling for the tone selector', () => {
+    render(<Page />)
+    const select = screen.getByLabelText(/Tone:/i)
+    
+    expect(select).toHaveClass('text-zinc-900')
+    expect(select).toHaveClass('border-zinc-300')
+    expect(select).toHaveClass('bg-zinc-50')
+  })
 })

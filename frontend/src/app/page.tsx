@@ -73,14 +73,14 @@ export default function Home() {
           <p className="text-xs text-zinc-500">Always here to help</p>
         </div>
         <div className="flex items-center gap-2">
-          <label htmlFor="tone-select" className="text-xs font-medium text-zinc-600">
+          <label htmlFor="tone-select" className="text-xs font-medium text-zinc-900">
             Tone:
           </label>
           <select
             id="tone-select"
             value={tone}
             onChange={(e) => setTone(e.target.value as Tone)}
-            className="text-xs border rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-black"
+            className="text-xs border border-zinc-300 rounded-md px-2 py-1 bg-zinc-50 text-zinc-900 focus:outline-none focus:ring-1 focus:ring-black"
           >
             <option value="Helpful Professional">Helpful Professional</option>
             <option value="Friendly Assistant">Friendly Assistant</option>
