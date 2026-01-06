@@ -7,14 +7,14 @@
     - [ ] Implement Feature: Update `backend/app/main.py` to load `GROQ_API_KEY` from environment
 - [ ] Task: Conductor - User Manual Verification 'Environment & SDK Setup' (Protocol in workflow.md)
 
-## Phase 2: Agent & Tool Logic
-- [ ] Task: Define Product Search Tool
-    - [ ] Write Tests: Verify the tool correctly wraps the `search_products` database logic
-    - [ ] Implement Feature: Create a LangChain tool for product search
-- [ ] Task: Implement Agent with Dynamic System Prompts
-    - [ ] Write Tests: Verify the agent correctly selects prompts based on 'tone'
-    - [ ] Implement Feature: Create the agent executor logic in the backend
-- [ ] Task: Conductor - User Manual Verification 'Agent & Tool Logic' (Protocol in workflow.md)
+## Phase 2: Agent & Tool Logic [checkpoint: 3ebb106]
+- [x] Task: Define Product Search Tool 3ebb106
+    - [x] Write Tests: Verify the tool correctly wraps the `search_products` database logic
+    - [x] Implement Feature: Create a LangChain tool for product search
+- [x] Task: Implement Agent with Dynamic System Prompts 3ebb106
+    - [x] Write Tests: Verify the agent correctly selects prompts based on 'tone'
+    - [x] Implement Feature: Create the agent executor logic in the backend
+- [x] Task: Conductor - User Manual Verification 'Agent & Tool Logic' (Protocol in workflow.md)
 
 ## Phase 3: API Integration
 - [ ] Task: Update Chat Endpoint to use Agent
