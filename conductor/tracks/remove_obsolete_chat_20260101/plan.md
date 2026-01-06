@@ -7,7 +7,7 @@
 - [ ] Task: Conductor - User Manual Verification 'Home Page Cleanup' (Protocol in workflow.md)
 
 ## Phase 2: File Deletion and Final Cleanup
-- [ ] Task: Delete obsolete component and test files
+- [x] Task: Delete obsolete component and test files 49a5eac
     - [ ] Implement Feature: Delete `ChatInput.tsx`, `ChatInput.test.tsx`, `MessageList.tsx`, and `MessageList.test.tsx`
 - [ ] Task: Verify overall application health
     - [ ] Implement Feature: Run all frontend tests and build the application to ensure no regressions
