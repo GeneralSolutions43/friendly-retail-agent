@@ -14,8 +14,9 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Implementation of Fixes' (Protocol in workflow.md) 4bf7fdc
 
 ## Phase 3: Final Verification and Quality Gates
-- [ ] Task: Verify `GET /products/search` also works correctly and excludes embeddings.
-- [ ] Task: Run full backend test suite to ensure no regressions.
-- [ ] Task: Verify code coverage for modified files is >80%.
-- [ ] Task: Run linting and type checking (`ruff`, `mypy` or `pyright`).
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Final Verification and Quality Gates' (Protocol in workflow.md)
+- [x] Task: Verify `GET /products/search` also works correctly and excludes embeddings. 2d3eb16
+- [x] Task: Run full backend test suite to ensure no regressions. 2d3eb16
+- [x] Task: Run coverage reports using the project's chosen tools. For example, in a Python project, this might look like: 2d3eb16
+- [x] Task: Verify code coverage for modified files is >80%. 2d3eb16
+- [x] Task: Run linting and type checking (`ruff`, `mypy` or `pyright`). 2d3eb16
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Final Verification and Quality Gates' (Protocol in workflow.md) 2d3eb16
