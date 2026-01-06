@@ -24,4 +24,4 @@
 ## Phase 4: Refinement & Polish
 - [x] Task: Optimize Vector Search. Add an HNSW index to the embedding column for better performance. [commit: 0e0ab65]
 - [x] Task: Final UI/UX Check. Ensure the agent's responses using RAG data are natural and well-formatted. [commit: 1ecc619]
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Refinement & Polish' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Refinement & Polish' (Protocol in workflow.md) [checkpoint: 526eec0]
