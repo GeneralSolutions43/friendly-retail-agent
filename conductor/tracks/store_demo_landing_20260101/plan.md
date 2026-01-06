@@ -10,7 +10,7 @@
 - [x] Task: Create ProductCard component 22424ca
     - [ ] Write Tests: Verify ProductCard renders all required information
     - [ ] Implement Feature: Create `frontend/src/components/ProductCard.tsx`
-- [ ] Task: Implement Storefront layout on Home page
+- [x] Task: Implement Storefront layout on Home page 7296d5e
     - [ ] Write Tests: Ensure Home page renders hero and product grid
     - [ ] Implement Feature: Update `frontend/src/app/page.tsx` with Hero and ProductGrid
 - [ ] Task: Conductor - User Manual Verification 'Frontend Storefront Components' (Protocol in workflow.md)
