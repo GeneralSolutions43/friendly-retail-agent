@@ -3,7 +3,7 @@
 ## Phase 1: Infrastructure & Environment Setup
 - [x] Task: Update Backend dependencies. Add `sentence-transformers` and `torch` (CPU) to `backend/requirements.txt`. [commit: df8de79]
 - [x] Task: Configure Database for `pgvector`. Update `docker-compose.yml` (if necessary) and verify `pgvector` extension can be enabled. [commit: b132ca0]
-- [ ] Task: Create Vector Index. Implement a migration or script to enable the `vector` extension and add an `embedding` column to the `Product` table.
+- [x] Task: Create Vector Index. Implement a migration or script to enable the `vector` extension and add an `embedding` column to the `Product` table. [commit: 13d6317]
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Environment Setup' (Protocol in workflow.md)
 
 ## Phase 2: Embedding Service & Real-time Sync
