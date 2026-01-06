@@ -13,7 +13,7 @@
 - [x] Task: Run generic serialization tests to ensure `numpy.ndarray` is now handled correctly. 4bf7fdc
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Implementation of Fixes' (Protocol in workflow.md) 4bf7fdc
 
-## Phase 3: Final Verification and Quality Gates
+## Phase 3: Final Verification and Quality Gates [checkpoint: 84c4ea3]
 - [x] Task: Verify `GET /products/search` also works correctly and excludes embeddings. 2d3eb16
 - [x] Task: Run full backend test suite to ensure no regressions. 2d3eb16
 - [x] Task: Run coverage reports using the project's chosen tools. For example, in a Python project, this might look like: 2d3eb16
