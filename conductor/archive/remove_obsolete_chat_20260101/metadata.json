@@ -1,0 +1,8 @@
+{
+  "track_id": "remove_obsolete_chat_20260101",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-01-01T23:59:00Z",
+  "updated_at": "2026-01-01T23:59:00Z",
+  "description": "Remove the original chat interface from the Home page and delete obsolete component files now that MinimalAgentOverlay is implemented."
+}
