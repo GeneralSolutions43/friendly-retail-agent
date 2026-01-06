@@ -15,8 +15,8 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Embedding Service & Real-time Sync' (Protocol in workflow.md) [checkpoint: ac9dc82]
 
 ## Phase 3: Semantic Search Integration
-- [ ] Task: Implement Semantic Search Tool. Create `search_products_semantic` tool for the LangChain agent.
-- [ ] Task: Test Semantic Search Tool. Write unit tests to verify vector similarity results (Red/Green/Refactor).
+- [x] Task: Implement Semantic Search Tool. Create `search_products_semantic` tool for the LangChain agent. [commit: aa728c0]
+- [x] Task: Test Semantic Search Tool. Write unit tests to verify vector similarity results (Red/Green/Refactor). [commit: aa728c0]
 - [ ] Task: Enhance Agent Logic. Integrate the semantic search tool into the `get_agent_response` workflow.
 - [ ] Task: Test End-to-End Search. Verify the agent can answer semantic queries (e.g., "Recommend winter gear") in the chat (Red/Green/Refactor).
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Semantic Search Integration' (Protocol in workflow.md)
