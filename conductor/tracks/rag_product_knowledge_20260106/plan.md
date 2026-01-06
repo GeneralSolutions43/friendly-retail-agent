@@ -8,8 +8,8 @@
 
 ## Phase 2: Embedding Service & Real-time Sync
 - [x] Task: Implement Embedding Utility. Create `backend/app/embeddings.py` using `SentenceTransformers`. [commit: 59bf0d6]
-- [ ] Task: Test Embedding Utility. Write unit tests to verify embedding generation (Red/Green/Refactor).
-- [ ] Task: Implement Automatic Sync. Update the `Product` creation/update logic to generate and store embeddings in real-time.
+- [x] Task: Test Embedding Utility. Write unit tests to verify embedding generation (Red/Green/Refactor). [commit: 59bf0d6]
+- [~] Task: Implement Automatic Sync. Update the `Product` creation/update logic to generate and store embeddings in real-time.
 - [ ] Task: Test Automatic Sync. Write unit tests to verify that saving a product updates its embedding (Red/Green/Refactor).
 - [ ] Task: Bulk Seeding Script. Create a script to generate embeddings for existing products in the database.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Embedding Service & Real-time Sync' (Protocol in workflow.md)
