@@ -12,7 +12,7 @@
 - [x] Task: Implement Automatic Sync. Update the `Product` creation/update logic to generate and store embeddings in real-time. [commit: a1839c8]
 - [x] Task: Test Automatic Sync. Write unit tests to verify that saving a product updates its embedding (Red/Green/Refactor). [commit: a1839c8]
 - [x] Task: Bulk Seeding Script. Create a script to generate embeddings for existing products in the database. [commit: c79a283]
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Embedding Service & Real-time Sync' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Embedding Service & Real-time Sync' (Protocol in workflow.md) [checkpoint: ac9dc82]
 
 ## Phase 3: Semantic Search Integration
 - [ ] Task: Implement Semantic Search Tool. Create `search_products_semantic` tool for the LangChain agent.
