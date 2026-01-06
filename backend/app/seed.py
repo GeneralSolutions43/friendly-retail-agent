@@ -2,7 +2,7 @@
 
 import os
 from sqlmodel import Session, select, create_engine, SQLModel
-from app.models import Product
+from .models import Product
 
 DATABASE_URL = os.getenv("DATABASE_URL",
                          "postgresql://user:password@localhost:5432/retail_agent")
