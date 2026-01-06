@@ -19,7 +19,7 @@
 - [x] Task: Test Semantic Search Tool. Write unit tests to verify vector similarity results (Red/Green/Refactor). [commit: aa728c0]
 - [x] Task: Enhance Agent Logic. Integrate the semantic search tool into the `get_agent_response` workflow. [commit: 30dfc64]
 - [x] Task: Test End-to-End Search. Verify the agent can answer semantic queries (e.g., "Recommend winter gear") in the chat (Red/Green/Refactor). [commit: 3a88430]
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Semantic Search Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Semantic Search Integration' (Protocol in workflow.md) [checkpoint: 25a5339]
 
 ## Phase 4: Refinement & Polish
 - [ ] Task: Optimize Vector Search. Add an HNSW index to the embedding column for better performance.
