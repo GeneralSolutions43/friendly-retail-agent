@@ -22,6 +22,6 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Semantic Search Integration' (Protocol in workflow.md) [checkpoint: 25a5339]
 
 ## Phase 4: Refinement & Polish
-- [ ] Task: Optimize Vector Search. Add an HNSW index to the embedding column for better performance.
+- [x] Task: Optimize Vector Search. Add an HNSW index to the embedding column for better performance. [commit: 0e0ab65]
 - [ ] Task: Final UI/UX Check. Ensure the agent's responses using RAG data are natural and well-formatted.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Refinement & Polish' (Protocol in workflow.md)
