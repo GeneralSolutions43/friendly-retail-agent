@@ -16,8 +16,8 @@
     - [x] Implement Feature: Create the agent executor logic in the backend
 - [x] Task: Conductor - User Manual Verification 'Agent & Tool Logic' (Protocol in workflow.md)
 
-## Phase 3: API Integration
-- [ ] Task: Update Chat Endpoint to use Agent
-    - [ ] Write Tests: Verify `/chat` returns AI-generated responses (can use mock for API call)
-    - [ ] Implement Feature: Replace mock logic in `POST /chat` with the agent call
-- [ ] Task: Conductor - User Manual Verification 'API Integration' (Protocol in workflow.md)
+## Phase 3: API Integration [checkpoint: 312ad51]
+- [x] Task: Update Chat Endpoint to use Agent 312ad51
+    - [x] Write Tests: Verify `/chat` returns AI-generated responses (can use mock for API call)
+    - [x] Implement Feature: Replace mock logic in `POST /chat` with the agent call
+- [x] Task: Conductor - User Manual Verification 'API Integration' (Protocol in workflow.md)
