@@ -3,10 +3,10 @@
 ## Phase 1: Data Preparation
 - [x] Task: Define new athletic apparel items 144f867
     - [ ] Implement Feature: Research and list 10-15 athletic apparel items with details (Name, Price, Category, Description, Inventory)
-- [ ] Task: Update seeding script
+- [x] Task: Update seeding script bdbbd0e
     - [ ] Write Tests: Ensure seeding script handles new data without duplicates
     - [ ] Implement Feature: Update `backend/app/seed.py` with the new product list
-- [ ] Task: Conductor - User Manual Verification 'Data Preparation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Data Preparation' (Protocol in workflow.md)
 
 ## Phase 2: Verification
 - [ ] Task: Execute seeding and verify visibility
