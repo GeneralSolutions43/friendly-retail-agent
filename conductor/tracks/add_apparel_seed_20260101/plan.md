@@ -9,8 +9,8 @@
 - [x] Task: Conductor - User Manual Verification 'Data Preparation' (Protocol in workflow.md)
 
 ## Phase 2: Verification
-- [ ] Task: Execute seeding and verify visibility
+- [x] Task: Execute seeding and verify visibility
     - [ ] Implement Feature: Run the seeding script in the Docker environment and verify products via `/products`
-- [ ] Task: Verify AI Agent discovery
+- [x] Task: Verify AI Agent discovery
     - [ ] Implement Feature: Ask the AI agent about the new athletic wear to confirm semantic discovery works
-- [ ] Task: Conductor - User Manual Verification 'Verification' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Verification' (Protocol in workflow.md)
