@@ -2,11 +2,16 @@
 
 import os
 import json
-from typing import List, Generator, Literal
+from typing import List, Generator, Literal, Any
 from contextlib import asynccontextmanager
+import numpy as np
 from fastapi import FastAPI, Depends, Query
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder, ENCODERS_BY_TYPE
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, select, create_engine, SQLModel, text
+
+ENCODERS_BY_TYPE[np.ndarray] = lambda x: x.tolist()
 from pydantic import BaseModel
 from langchain_core.tools import tool
 from langchain_groq import ChatGroq
@@ -33,7 +38,26 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(lifespan=lifespan)
+class NumpyJSONResponse(JSONResponse):
+    """Custom JSONResponse that handles numpy arrays by converting them to lists."""
+
+    def render(self, content: Any) -> bytes:
+        def numpy_default(obj):
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            return str(obj)
+
+        return json.dumps(
+            content,
+            ensure_ascii=False,
+            allow_nan=False,
+            indent=None,
+            separators=(",", ":"),
+            default=numpy_default,
+        ).encode("utf-8")
+
+
+app = FastAPI(lifespan=lifespan, default_response_class=NumpyJSONResponse)
 
 # CORS Configuration
 origins = [

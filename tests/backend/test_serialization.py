@@ -6,26 +6,26 @@ from typing import Any
 class GenericModel(BaseModel):
     data: Any
 
-def test_numpy_serialization_error():
+def test_numpy_serialization_success():
     """
-    Test that a generic Pydantic model fails to serialize a numpy array by default.
+    Test that a numpy array can be serialized when using the custom response logic.
     """
-    model = GenericModel(data=np.array([1, 2, 3]))
+    from backend.app.main import NumpyJSONResponse
+    import json
     
-    # This should fail initially
-    with pytest.raises(Exception) as excinfo:
-        model.model_dump_json()
-    
-    # In Pydantic v2, it's PydanticSerializationError
-    assert "Unable to serialize unknown type: <class 'numpy.ndarray'>" in str(excinfo.value)
+    data = {"array": np.array([1, 2, 3])}
+    response = NumpyJSONResponse(content=data)
+    rendered = json.loads(response.body.decode())
+    assert rendered["array"] == [1, 2, 3]
 
-def test_numpy_list_serialization():
+def test_numpy_list_serialization_success():
     """
-    Test serialization of a list containing numpy arrays if we have a global handler.
-    (This will fail until the fix is implemented)
+    Test serialization of a list containing numpy arrays using the custom response class.
     """
-    data = {"items": [np.array([1.0, 2.0]), np.array([3.0, 4.0])]}
-    adapter = TypeAdapter(dict[str, list[Any]])
+    from backend.app.main import NumpyJSONResponse
+    import json
     
-    with pytest.raises(Exception):
-        adapter.dump_json(data)
+    data = {"items": [np.array([1.0, 2.0]), np.array([3.0, 4.0])]}
+    response = NumpyJSONResponse(content=data)
+    rendered = json.loads(response.body.decode())
+    assert rendered["items"] == [[1.0, 2.0], [3.0, 4.0]]

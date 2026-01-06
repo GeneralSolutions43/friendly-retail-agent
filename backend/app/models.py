@@ -11,7 +11,7 @@ class Product(SQLModel, table=True):
     price: float
     description: str
     inventory_count: int = Field(default=0)
-    embedding: Optional[List[float]] = Field(default=None, sa_column=Column(Vector(384)))
+    embedding: Optional[List[float]] = Field(default=None, sa_column=Column(Vector(384)), exclude=True)
 
     def update_embedding(self):
         """Generates and updates the embedding for the product."""
