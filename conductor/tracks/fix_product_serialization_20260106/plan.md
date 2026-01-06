@@ -1,6 +1,6 @@
 # Plan: Fix Product Serialization Error (numpy.ndarray)
 
-## Phase 1: Reproduction and Base Testing
+## Phase 1: Reproduction and Base Testing [checkpoint: 6ffc9c1]
 - [x] Task: Create a failing test case in `tests/backend/test_products.py` that reproduces the 500 error on `GET /products`. 3268366
 - [x] Task: Create a new test file `tests/backend/test_serialization.py` to test generic `numpy.ndarray` serialization in Pydantic models. 3268366
 - [x] Task: Run tests and confirm they fail with `PydanticSerializationError`. 3268366
