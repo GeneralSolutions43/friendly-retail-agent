@@ -10,8 +10,15 @@ jest.mock('@/components/ErudaProvider', () => {
   return MockErudaProvider
 })
 
+// Mock MinimalAgentOverlay
+jest.mock('@/components/MinimalAgentOverlay', () => {
+  const MockMinimalAgentOverlay = () => <div data-testid="minimal-agent-overlay" />
+  MockMinimalAgentOverlay.displayName = 'MockMinimalAgentOverlay'
+  return MockMinimalAgentOverlay
+})
+
 describe('RootLayout', () => {
-  it('renders children wrapped in ErudaProvider', () => {
+  it('renders children wrapped in ErudaProvider and includes MinimalAgentOverlay', () => {
     const { getByTestId } = render(
       <RootLayout>
         <div data-testid="child">Test Child</div>
@@ -20,5 +27,6 @@ describe('RootLayout', () => {
     
     expect(getByTestId('eruda-provider')).toBeInTheDocument()
     expect(getByTestId('child')).toBeInTheDocument()
+    expect(getByTestId('minimal-agent-overlay')).toBeInTheDocument()
   })
 })
