@@ -1,4 +1,5 @@
 from fastapi.testclient import TestClient
+from unittest.mock import patch
 from backend.app.main import app
 
 client = TestClient(app)
@@ -21,11 +22,13 @@ def test_cors_headers():
     assert "POST" in response.headers["access-control-allow-methods"]
     assert "content-type" in response.headers["access-control-allow-headers"]
 
-    # Actual request
-    response = client.post(
-        "/chat", 
-        json={"message": "test", "tone": "Helpful Professional"},
-        headers={"Origin": origin}
-    )
-    assert response.status_code == 200
-    assert response.headers["access-control-allow-origin"] == origin
+    # Actual request - mock agent response to avoid requiring API key
+    with patch('backend.app.main.get_agent_response') as mock_agent:
+        mock_agent.return_value = "AI response"
+        response = client.post(
+            "/chat", 
+            json={"message": "test", "tone": "Helpful Professional"},
+            headers={"Origin": origin}
+        )
+        assert response.status_code == 200
+        assert response.headers["access-control-allow-origin"] == origin

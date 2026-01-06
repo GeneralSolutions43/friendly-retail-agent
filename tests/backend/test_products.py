@@ -13,6 +13,7 @@ engine = create_engine(
 )
 
 def create_test_database():
+    # Ensure tables are created on the test engine
     SQLModel.metadata.create_all(engine)
     with Session(engine) as session:
         # Check if data exists

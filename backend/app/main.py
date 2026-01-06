@@ -11,7 +11,7 @@ from pydantic import BaseModel
 from langchain_core.tools import tool
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
-from backend.app.models import Product
+from .models import Product
 
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
@@ -73,7 +73,7 @@ def get_session() -> Generator[Session, None, None]:
 @tool
 def search_products_tool(query: str) -> str:
     """Search for products in the retail store by name or description.
-    
+
     Args:
         query: The search term to look for.
     """
@@ -84,7 +84,7 @@ def search_products_tool(query: str) -> str:
         products = session.exec(statement).all()
         if not products:
             return f"No products found matching '{query}'."
-        
+
         result = "Found the following products:\n"
         for p in products:
             result += f"- {p.name} ({p.category}): ${p.price}. {p.description}\n"
@@ -93,15 +93,11 @@ def search_products_tool(query: str) -> str:
 
 def get_agent_response(message: str, tone: str) -> str:
     """Invoke the AI agent and return the response text."""
-    llm = ChatGroq(
-        model="llama3-70b-8192",
-        api_key=GROQ_API_KEY,
-        temperature=0.7
-    )
-    
+    llm = ChatGroq(model="openai/gpt-oss-120b", api_key=GROQ_API_KEY, temperature=0.7)
+
     tools = [search_products_tool]
     llm_with_tools = llm.bind_tools(tools)
-    
+
     system_prompts = {
         "Helpful Professional": (
             "You are a helpful and professional retail assistant. "
@@ -117,28 +113,32 @@ def get_agent_response(message: str, tone: str) -> str:
             "You are a highly knowledgeable retail expert and consultant. "
             "Provide deep insights, detailed product comparisons, and curated advice. "
             "Analyze product data from the tools carefully before responding."
-        )
+        ),
     }
-    
+
     messages = [
-        SystemMessage(content=system_prompts.get(tone, system_prompts["Helpful Professional"])),
-        HumanMessage(content=message)
+        SystemMessage(
+            content=system_prompts.get(tone, system_prompts["Helpful Professional"])
+        ),
+        HumanMessage(content=message),
     ]
-    
+
     ai_msg = llm_with_tools.invoke(messages)
     messages.append(ai_msg)
-    
+
     # Process tool calls
     for tool_call in ai_msg.tool_calls:
-        selected_tool = {"search_products_tool": search_products_tool}[tool_call["name"].lower()]
+        selected_tool = {"search_products_tool": search_products_tool}[
+            tool_call["name"].lower()
+        ]
         tool_output = selected_tool.invoke(tool_call["args"])
         messages.append(ToolMessage(tool_output, tool_call_id=tool_call["id"]))
-    
+
     if ai_msg.tool_calls:
         # Get final response after tool outputs
         final_msg = llm_with_tools.invoke(messages)
         return str(final_msg.content)
-    
+
     return str(ai_msg.content)
 
 
@@ -197,21 +197,6 @@ def chat_endpoint(request: ChatRequest):
     Returns:
         ChatResponse: The agent's response.
     """
-    # Placeholder logic - using get_agent_response in Phase 3
-    if request.tone == "Helpful Professional":
-        response_text = (
-            f"I have received your message: '{request.message}'. "
-            "How may I assist you further?"
-        )
-    elif request.tone == "Friendly Assistant":
-        response_text = (
-            f"Hey there! Got your message: '{request.message}'. "
-            "Let me know what you need!"
-        )
-    else:  # Expert Consultant
-        response_text = (
-            f"I have analyzed your input: '{request.message}'. "
-            "Here are my recommendations."
-        )
-
+    response_text = get_agent_response(request.message, request.tone)
     return ChatResponse(response=response_text, tone=request.tone)
+

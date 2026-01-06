@@ -8,7 +8,7 @@
 ## Backend
 * **Framework:** FastAPI
 * **Language:** Python
-* **AI/ML Integration:** (To be defined based on specific requirements, likely using libraries like LangChain or OpenAI SDK)
+* **AI/ML Integration:** Llama 3 via Groq API, LangChain for agent and tool management.
 
 ## Database & Storage
 * **Primary Database:** PostgreSQL (for structured product and user data)
