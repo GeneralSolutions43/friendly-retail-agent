@@ -6,7 +6,7 @@
 - [x] Task: Run tests and confirm they fail with `PydanticSerializationError`. 3268366
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Reproduction and Base Testing' (Protocol in workflow.md) 3268366
 
-## Phase 2: Implementation of Fixes
+## Phase 2: Implementation of Fixes [checkpoint: f7db152]
 - [x] Task: Update `backend/app/models.py` to exclude the `embedding` field from serialization in the `Product` model. 4bf7fdc
 - [x] Task: Implement a global serialization handler for `numpy.ndarray` in `backend/app/main.py` (e.g., using a custom FastAPI `DefaultJSONResponse` or Pydantic configuration). 4bf7fdc
 - [x] Task: Run tests to ensure `GET /products` returns 200 OK and excludes the `embedding` field. 4bf7fdc
