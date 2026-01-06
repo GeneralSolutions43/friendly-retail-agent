@@ -17,7 +17,7 @@ Goal: Ensure the agent correctly acknowledges user statements and maintains conv
 - [x] Task: Backend - Update the agent system prompt or logic to ensure it acknowledges preferences even when no product search is triggered.
 - [x] Task: Conductor - User Manual Verification 'Fix Conversational Handling' (Protocol in workflow.md)
 
-## Phase 3: Fix Tool Triggering and Semantic Search
+## Phase 3: Fix Tool Triggering and Semantic Search [checkpoint: 62ef52d]
 Goal: Ensure product-related queries correctly trigger the semantic search tool and return results.
 
 - [x] Task: Backend - Create a reproduction test case for "Do you have anything that will help when my muscles are sore?".
@@ -27,5 +27,5 @@ Goal: Ensure product-related queries correctly trigger the semantic search tool 
 ## Phase 4: Final Verification and Cleanup
 Goal: Ensure all reported cases are fixed and system stability is maintained.
 
-- [ ] Task: Backend/Frontend - Verify all acceptance criteria from `spec.md`.
-- [ ] Task: Conductor - User Manual Verification 'Final Verification and Cleanup' (Protocol in workflow.md)
+- [x] Task: Backend/Frontend - Verify all acceptance criteria from `spec.md`.
+- [x] Task: Conductor - User Manual Verification 'Final Verification and Cleanup' (Protocol in workflow.md)
