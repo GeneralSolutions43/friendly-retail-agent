@@ -3,7 +3,7 @@
 ## Phase 1: Environment & SDK Setup
 - [x] Task: Install Groq dependencies f30c157
     - [ ] Implement Feature: Add `groq` and `langchain-groq` to `backend/pyproject.toml`
-- [ ] Task: Configure API Key management
+- [x] Task: Configure API Key management 4c042da
     - [ ] Implement Feature: Update `backend/app/main.py` to load `GROQ_API_KEY` from environment
 - [ ] Task: Conductor - User Manual Verification 'Environment & SDK Setup' (Protocol in workflow.md)
 
