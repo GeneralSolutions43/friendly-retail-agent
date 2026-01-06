@@ -7,7 +7,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Environment Setup' (Protocol in workflow.md) [checkpoint: cee3cdd]
 
 ## Phase 2: Embedding Service & Real-time Sync
-- [ ] Task: Implement Embedding Utility. Create `backend/app/embeddings.py` using `SentenceTransformers`.
+- [x] Task: Implement Embedding Utility. Create `backend/app/embeddings.py` using `SentenceTransformers`. [commit: 59bf0d6]
 - [ ] Task: Test Embedding Utility. Write unit tests to verify embedding generation (Red/Green/Refactor).
 - [ ] Task: Implement Automatic Sync. Update the `Product` creation/update logic to generate and store embeddings in real-time.
 - [ ] Task: Test Automatic Sync. Write unit tests to verify that saving a product updates its embedding (Red/Green/Refactor).
