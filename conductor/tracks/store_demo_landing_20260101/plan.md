@@ -1,10 +1,10 @@
 # Plan: Store Demo Landing Page
 
-## Phase 1: Backend Endpoint
+## Phase 1: Backend Endpoint [checkpoint: f0e6273]
 - [x] Task: Implement list products endpoint c92c5bc
-    - [ ] Write Tests: Ensure `/products` returns a list of products
-    - [ ] Implement Feature: Add `GET /products` to `backend/app/main.py`
-- [ ] Task: Conductor - User Manual Verification 'Backend Endpoint' (Protocol in workflow.md)
+    - [x] Write Tests: Ensure `/products` returns a list of products
+    - [x] Implement Feature: Add `GET /products` to `backend/app/main.py`
+- [x] Task: Conductor - User Manual Verification 'Backend Endpoint' (Protocol in workflow.md)
 
 ## Phase 2: Frontend Storefront Components
 - [ ] Task: Create ProductCard component
