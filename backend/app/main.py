@@ -12,6 +12,7 @@ from langchain_core.tools import tool
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from .models import Product
+from .embeddings import get_embedding
 
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
@@ -94,11 +95,36 @@ def search_products_tool(query: str) -> str:
         return result
 
 
+@tool
+def search_products_semantic(query: str) -> str:
+    """Search for products using semantic vector similarity.
+
+    Use this tool when the user's query implies a meaning or theme rather than specific keywords.
+    
+    Args:
+        query: The search text to find semantically similar products for.
+    """
+    embedding_vector = get_embedding(query)
+
+    with Session(engine) as session:
+        # Order by similarity (L2 distance)
+        statement = select(Product).order_by(Product.embedding.l2_distance(embedding_vector)).limit(5)
+        products = session.exec(statement).all()
+
+        if not products:
+            return f"No relevant products found for '{query}'."
+
+        result = "Found the following relevant products:\n"
+        for p in products:
+            result += f"- {p.name} ({p.category}): ${p.price}. {p.description}\n"
+        return result
+
+
 def get_agent_response(message: str, tone: str) -> str:
     """Invoke the AI agent and return the response text."""
     llm = ChatGroq(model="openai/gpt-oss-120b", api_key=GROQ_API_KEY, temperature=0.7)
 
-    tools = [search_products_tool]
+    tools = [search_products_tool, search_products_semantic]
     llm_with_tools = llm.bind_tools(tools)
 
     system_prompts = {
@@ -131,11 +157,14 @@ def get_agent_response(message: str, tone: str) -> str:
 
     # Process tool calls
     for tool_call in ai_msg.tool_calls:
-        selected_tool = {"search_products_tool": search_products_tool}[
-            tool_call["name"].lower()
-        ]
-        tool_output = selected_tool.invoke(tool_call["args"])
-        messages.append(ToolMessage(tool_output, tool_call_id=tool_call["id"]))
+        selected_tool_map = {
+            "search_products_tool": search_products_tool,
+            "search_products_semantic": search_products_semantic,
+        }
+        selected_tool = selected_tool_map.get(tool_call["name"].lower())
+        if selected_tool:
+            tool_output = selected_tool.invoke(tool_call["args"])
+            messages.append(ToolMessage(tool_output, tool_call_id=tool_call["id"]))
 
     if ai_msg.tool_calls:
         # Get final response after tool outputs
