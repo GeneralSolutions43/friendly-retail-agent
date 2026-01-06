@@ -2,7 +2,7 @@
 
 This plan addresses the issue where the agent returns empty responses for specific conversational and product-related queries.
 
-## Phase 1: Diagnostics and Error Handling Improvements
+## Phase 1: Diagnostics and Error Handling Improvements [checkpoint: 5ac4106]
 Goal: Improve visibility into why responses are blank and ensure the UI never shows an empty bubble.
 
 - [x] Task: Backend - Add enhanced logging to the LLM response generation path.
@@ -13,9 +13,9 @@ Goal: Improve visibility into why responses are blank and ensure the UI never sh
 ## Phase 2: Fix Conversational Handling
 Goal: Ensure the agent correctly acknowledges user statements and maintains conversation.
 
-- [ ] Task: Backend - Create a reproduction test case for conversational statements like "I like to listen to music when I exercise".
-- [ ] Task: Backend - Update the agent system prompt or logic to ensure it acknowledges preferences even when no product search is triggered.
-- [ ] Task: Conductor - User Manual Verification 'Fix Conversational Handling' (Protocol in workflow.md)
+- [x] Task: Backend - Create a reproduction test case for conversational statements like "I like to listen to music when I exercise".
+- [x] Task: Backend - Update the agent system prompt or logic to ensure it acknowledges preferences even when no product search is triggered.
+- [x] Task: Conductor - User Manual Verification 'Fix Conversational Handling' (Protocol in workflow.md)
 
 ## Phase 3: Fix Tool Triggering and Semantic Search
 Goal: Ensure product-related queries correctly trigger the semantic search tool and return results.
