@@ -72,6 +72,21 @@ async def health_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@app.get("/products", response_model=List[Product])
+def list_products(session: Session = Depends(get_session)) -> List[Product]:
+    """List all products.
+
+    Args:
+        session (Session): The database session.
+
+    Returns:
+        List[Product]: A list of all products.
+    """
+    statement = select(Product)
+    products = session.exec(statement).all()
+    return products
+
+
 @app.get("/products/search", response_model=List[Product])
 def search_products(
     query: str = Query(..., min_length=1), session: Session = Depends(get_session)
