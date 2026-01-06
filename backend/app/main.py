@@ -13,6 +13,10 @@ from .models import Product
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
 engine = create_engine(DATABASE_URL)
 
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+if not GROQ_API_KEY:
+    print("WARNING: GROQ_API_KEY not found in environment. AI features will fail.")
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
