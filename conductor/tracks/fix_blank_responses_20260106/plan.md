@@ -10,7 +10,7 @@ Goal: Improve visibility into why responses are blank and ensure the UI never sh
 - [x] Task: Frontend - Add a UI fallback to display a generic error message if an empty response is received.
 - [x] Task: Conductor - User Manual Verification 'Diagnostics and Error Handling Improvements' (Protocol in workflow.md)
 
-## Phase 2: Fix Conversational Handling
+## Phase 2: Fix Conversational Handling [checkpoint: 431e9ba]
 Goal: Ensure the agent correctly acknowledges user statements and maintains conversation.
 
 - [x] Task: Backend - Create a reproduction test case for conversational statements like "I like to listen to music when I exercise".
@@ -20,9 +20,9 @@ Goal: Ensure the agent correctly acknowledges user statements and maintains conv
 ## Phase 3: Fix Tool Triggering and Semantic Search
 Goal: Ensure product-related queries correctly trigger the semantic search tool and return results.
 
-- [ ] Task: Backend - Create a reproduction test case for "Do you have anything that will help when my muscles are sore?".
-- [ ] Task: Backend - Investigate and fix why the agent fails to trigger tools or generate a response when product needs are identified.
-- [ ] Task: Conductor - User Manual Verification 'Fix Tool Triggering and Semantic Search' (Protocol in workflow.md)
+- [x] Task: Backend - Create a reproduction test case for "Do you have anything that will help when my muscles are sore?".
+- [x] Task: Backend - Investigate and fix why the agent fails to trigger tools or generate a response when product needs are identified.
+- [x] Task: Conductor - User Manual Verification 'Fix Tool Triggering and Semantic Search' (Protocol in workflow.md)
 
 ## Phase 4: Final Verification and Cleanup
 Goal: Ensure all reported cases are fixed and system stability is maintained.

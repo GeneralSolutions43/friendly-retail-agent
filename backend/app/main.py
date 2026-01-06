@@ -128,7 +128,7 @@ def search_products_tool(query: str) -> str:
 def search_products_semantic(query: str) -> str:
     """Search for products using semantic vector similarity.
 
-    Use this tool when the user's query implies a meaning or theme rather than specific keywords.
+    Use this tool when the user's query implies a meaning, theme, need, or problem (e.g., 'sore muscles', 'gift for runner', 'winter gear') rather than specific keywords.
     
     Args:
         query: The search text to find semantically similar products for.
