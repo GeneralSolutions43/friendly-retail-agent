@@ -35,11 +35,81 @@ app.dependency_overrides[get_session] = get_session_override
 client = TestClient(app)
 
 def test_get_all_products():
+
     create_test_database()
+
     response = client.get("/products")
+
     assert response.status_code == 200
+
     data = response.json()
+
     assert isinstance(data, list)
+
     assert len(data) >= 2
+
     assert any(p["name"] == "Test Product 1" for p in data)
+
     assert any(p["name"] == "Test Product 2" for p in data)
+
+
+
+def test_products_serialization_numpy_error():
+
+    """
+
+    Test that reproduces the PydanticSerializationError when a product has a numpy array as embedding.
+
+    """
+
+    import numpy as np
+
+    from unittest.mock import patch
+
+    
+
+    # Mock data with a numpy array for embedding
+
+    mock_product = Product(
+
+        id=999,
+
+        name="Numpy Product",
+
+        category="Test",
+
+        price=10.0,
+
+        description="Test Description",
+
+        inventory_count=1
+
+    )
+
+    # Manually set embedding to a numpy array to simulate what might come from the DB
+
+    mock_product.embedding = np.array([0.1, 0.2, 0.3], dtype=np.float32)
+
+    
+
+    with patch("backend.app.main.Session.exec") as mock_exec:
+
+        mock_exec.return_value.all.return_value = [mock_product]
+
+        
+
+        # This call should trigger the serialization error if 'embedding' is included
+
+        # and not handled by a custom serializer.
+
+        response = client.get("/products")
+
+        assert response.status_code == 200
+
+        data = response.json()
+
+        assert data[0]["name"] == "Numpy Product"
+
+        # We also expect 'embedding' to NOT be in the response eventually, 
+
+        # but for now we expect it to FAIL or return 500.
