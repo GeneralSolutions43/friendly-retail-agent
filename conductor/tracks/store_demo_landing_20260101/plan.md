@@ -6,11 +6,11 @@
     - [x] Implement Feature: Add `GET /products` to `backend/app/main.py`
 - [x] Task: Conductor - User Manual Verification 'Backend Endpoint' (Protocol in workflow.md)
 
-## Phase 2: Frontend Storefront Components
+## Phase 2: Frontend Storefront Components [checkpoint: a56c8e6]
 - [x] Task: Create ProductCard component 22424ca
-    - [ ] Write Tests: Verify ProductCard renders all required information
-    - [ ] Implement Feature: Create `frontend/src/components/ProductCard.tsx`
+    - [x] Write Tests: Verify ProductCard renders all required information
+    - [x] Implement Feature: Create `frontend/src/components/ProductCard.tsx`
 - [x] Task: Implement Storefront layout on Home page 7296d5e
-    - [ ] Write Tests: Ensure Home page renders hero and product grid
-    - [ ] Implement Feature: Update `frontend/src/app/page.tsx` with Hero and ProductGrid
-- [ ] Task: Conductor - User Manual Verification 'Frontend Storefront Components' (Protocol in workflow.md)
+    - [x] Write Tests: Ensure Home page renders hero and product grid
+    - [x] Implement Feature: Update `frontend/src/app/page.tsx` with Hero and ProductGrid
+- [x] Task: Conductor - User Manual Verification 'Frontend Storefront Components' (Protocol in workflow.md)
