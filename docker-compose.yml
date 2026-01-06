@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:16
+    image: ankane/pgvector:v0.5.1
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password

@@ -6,7 +6,7 @@ from typing import List, Generator, Literal
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, Query
 from fastapi.middleware.cors import CORSMiddleware
-from sqlmodel import Session, select, create_engine, SQLModel
+from sqlmodel import Session, select, create_engine, SQLModel, text
 from pydantic import BaseModel
 from langchain_core.tools import tool
 from langchain_groq import ChatGroq
@@ -25,6 +25,9 @@ if not GROQ_API_KEY:
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     """Create database tables on startup."""
+    with Session(engine) as session:
+        session.exec(text("CREATE EXTENSION IF NOT EXISTS vector"))
+        session.commit()
     SQLModel.metadata.create_all(engine)
     yield
 
