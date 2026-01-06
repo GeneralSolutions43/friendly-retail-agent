@@ -32,5 +32,8 @@ def test_semantic_search_tool_logic(mock_engine, mock_session_cls, mock_get_embe
     assert "Test Product" in result
     assert "winter clothes" not in result # The tool shouldn't just echo the query, but results.
     
+    # Check format: "- Name (Category): $Price. Description"
+    assert "- Test Product (Test): $10.0. Desc" in result
+    
     # Check that session.exec was called
     mock_session.exec.assert_called()
