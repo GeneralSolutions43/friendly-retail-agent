@@ -69,9 +69,11 @@ const MinimalAgentOverlay: React.FC = () => {
       }
 
       const data = await response.json()
+      const responseText = data.response?.trim() || "I'm sorry, I encountered an issue processing that. Could you try rephrasing?"
+      
       const agentMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: data.response,
+        text: responseText,
         sender: 'agent',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       }

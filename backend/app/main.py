@@ -2,23 +2,28 @@
 
 import os
 import json
+import logging
 from typing import List, Generator, Literal, Any
 from contextlib import asynccontextmanager
 import numpy as np
-from fastapi import FastAPI, Depends, Query
+from fastapi import FastAPI, Depends, Query, HTTPException
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder, ENCODERS_BY_TYPE
+from fastapi.encoders import ENCODERS_BY_TYPE
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, select, create_engine, SQLModel, text
-
-ENCODERS_BY_TYPE[np.ndarray] = lambda x: x.tolist()
 from pydantic import BaseModel
-from langchain_core.tools import tool
 from langchain_groq import ChatGroq
+from langchain_core.tools import tool
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from .models import Product
 from .embeddings import get_embedding
 
+# Register numpy array encoder for FastAPI's jsonable_encoder
+ENCODERS_BY_TYPE[np.ndarray] = lambda x: x.tolist()
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
 engine = create_engine(DATABASE_URL)
@@ -52,7 +57,7 @@ class NumpyJSONResponse(JSONResponse):
             ensure_ascii=False,
             allow_nan=False,
             indent=None,
-            separators=(",", ":"),
+            separators=( ",", ":"),
             default=numpy_default,
         ).encode("utf-8")
 
@@ -132,7 +137,9 @@ def search_products_semantic(query: str) -> str:
 
     with Session(engine) as session:
         # Order by similarity (L2 distance)
-        statement = select(Product).order_by(Product.embedding.l2_distance(embedding_vector)).limit(5)
+        statement = select(Product).order_by(
+            Product.embedding.l2_distance(embedding_vector)  # type: ignore
+        ).limit(5)
         products = session.exec(statement).all()
 
         if not products:
@@ -143,9 +150,9 @@ def search_products_semantic(query: str) -> str:
             result += f"- {p.name} ({p.category}): ${p.price}. {p.description}\n"
         return result
 
-
 def get_agent_response(message: str, tone: str) -> str:
     """Invoke the AI agent and return the response text."""
+    logger.info(f"Generating agent response for message: '{message}' with tone: '{tone}'")
     llm = ChatGroq(model="openai/gpt-oss-120b", api_key=GROQ_API_KEY, temperature=0.7)
 
     tools = [search_products_tool, search_products_semantic]
@@ -177,6 +184,7 @@ def get_agent_response(message: str, tone: str) -> str:
     ]
 
     ai_msg = llm_with_tools.invoke(messages)
+    logger.info(f"Initial AI message received: {ai_msg}")
     messages.append(ai_msg)
 
     # Process tool calls
@@ -187,15 +195,25 @@ def get_agent_response(message: str, tone: str) -> str:
         }
         selected_tool = selected_tool_map.get(tool_call["name"].lower())
         if selected_tool:
+            logger.info(f"Invoking tool: {tool_call['name']} with args: {tool_call['args']}")
             tool_output = selected_tool.invoke(tool_call["args"])
+            logger.info(f"Tool output: {tool_output}")
             messages.append(ToolMessage(tool_output, tool_call_id=tool_call["id"]))
 
+    content = ""
     if ai_msg.tool_calls:
         # Get final response after tool outputs
         final_msg = llm_with_tools.invoke(messages)
-        return str(final_msg.content)
+        logger.info(f"Final AI message received: {final_msg}")
+        content = str(final_msg.content)
+    else:
+        content = str(ai_msg.content)
 
-    return str(ai_msg.content)
+    if not content or content.strip() == "":
+        logger.warning(f"AI returned an empty response for message: '{message}'")
+        raise ValueError("AI generated an empty response.")
+
+    return content
 
 
 @app.get("/health")
@@ -253,6 +271,10 @@ def chat_endpoint(request: ChatRequest):
     Returns:
         ChatResponse: The agent's response.
     """
-    response_text = get_agent_response(request.message, request.tone)
+    try:
+        response_text = get_agent_response(request.message, request.tone)
+    except ValueError as e:
+        logger.error(f"Error in chat_endpoint: {e}")
+        response_text = "I'm sorry, I encountered an issue processing that. Could you try rephrasing?"
+    
     return ChatResponse(response=response_text, tone=request.tone)
-
