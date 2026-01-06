@@ -18,7 +18,7 @@
 - [x] Task: Implement Semantic Search Tool. Create `search_products_semantic` tool for the LangChain agent. [commit: aa728c0]
 - [x] Task: Test Semantic Search Tool. Write unit tests to verify vector similarity results (Red/Green/Refactor). [commit: aa728c0]
 - [x] Task: Enhance Agent Logic. Integrate the semantic search tool into the `get_agent_response` workflow. [commit: 30dfc64]
-- [ ] Task: Test End-to-End Search. Verify the agent can answer semantic queries (e.g., "Recommend winter gear") in the chat (Red/Green/Refactor).
+- [x] Task: Test End-to-End Search. Verify the agent can answer semantic queries (e.g., "Recommend winter gear") in the chat (Red/Green/Refactor). [commit: 3a88430]
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Semantic Search Integration' (Protocol in workflow.md)
 
 ## Phase 4: Refinement & Polish
