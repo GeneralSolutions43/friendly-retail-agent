@@ -8,7 +8,7 @@
 
 ## Phase 2: Backend - Basic Session Storage
 - [x] Task: Update `ChatRequest` model to include `session_id` feef224
-- [ ] Task: Implement `RedisChatMessageHistory` integration in `backend/app/main.py`
+- [x] Task: Implement `RedisChatMessageHistory` integration in `backend/app/main.py` 54f0178
 - [ ] Task: Update `get_agent_response` to retrieve and use message history
 - [ ] Task: Update `get_streaming_agent_response` to retrieve and use message history
 - [ ] Task: Add unit tests for session-based message retrieval
