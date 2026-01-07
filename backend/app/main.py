@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, select, create_engine, SQLModel, text
 from pydantic import BaseModel
 from langchain_groq import ChatGroq
-from langchain_redis import RedisChatMessageHistory
+from langchain_community.chat_message_histories import RedisChatMessageHistory
 from langchain_core.tools import tool
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage, AIMessage
 from .models import Product
@@ -119,7 +119,7 @@ def get_chat_history(session_id: str) -> RedisChatMessageHistory:
     """Retrieve chat message history from Redis."""
     return RedisChatMessageHistory(
         session_id=session_id,
-        redis_url=REDIS_URL,
+        url=REDIS_URL,
         key_prefix="retail_agent:chat_history:",
     )
 
