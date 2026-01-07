@@ -18,6 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, select, create_engine, SQLModel, text
 from pydantic import BaseModel
 from langchain_groq import ChatGroq
+from langchain_redis import RedisChatMessageHistory
 from langchain_core.tools import tool
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from .models import Product
@@ -28,6 +29,8 @@ ENCODERS_BY_TYPE[np.ndarray] = lambda x: x.tolist()
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
 engine = create_engine(DATABASE_URL)
+
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 if not GROQ_API_KEY:
@@ -97,6 +100,15 @@ class ChatResponse(BaseModel):
 
     response: str
     tone: str
+
+
+def get_chat_history(session_id: str) -> RedisChatMessageHistory:
+    """Retrieve chat message history from Redis."""
+    return RedisChatMessageHistory(
+        session_id=session_id,
+        redis_url=REDIS_URL,
+        key_prefix="retail_agent:chat_history:"
+    )
 
 
 def get_session() -> Generator[Session, None, None]:
