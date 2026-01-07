@@ -27,6 +27,7 @@ const MinimalAgentOverlay: React.FC = () => {
   const [tone, setTone] = useState<Tone>('Helpful Professional')
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isTyping, setIsTyping] = useState(false)
   const conversationRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -50,6 +51,7 @@ const MinimalAgentOverlay: React.FC = () => {
     const currentInput = inputValue
     setInputValue('')
     setIsLoading(true)
+    setIsTyping(true)
 
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8002'
@@ -65,6 +67,7 @@ const MinimalAgentOverlay: React.FC = () => {
       })
 
       if (!response.ok) {
+        setIsTyping(false)
         throw new Error('Failed to get response from agent')
       }
 
@@ -88,6 +91,9 @@ const MinimalAgentOverlay: React.FC = () => {
         while (true) {
           const { done, value } = await reader.read()
           if (done) break
+
+          // First chunk received, stop showing typing indicator
+          setIsTyping(false)
 
           const chunk = decoder.decode(value, { stream: true })
           const lines = chunk.split('\n')
@@ -122,6 +128,7 @@ const MinimalAgentOverlay: React.FC = () => {
       }
     } catch (error) {
       console.error('Error:', error)
+      setIsTyping(false)
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: 'Sorry, I encountered an error. Please try again.',
@@ -131,6 +138,7 @@ const MinimalAgentOverlay: React.FC = () => {
       setMessages((prev) => [...prev, errorMessage])
     } finally {
       setIsLoading(false)
+      setIsTyping(false)
     }
   }
 
@@ -207,6 +215,13 @@ const MinimalAgentOverlay: React.FC = () => {
                   <div className="message-time">{msg.time}</div>
                 </div>
               ))}
+              {isTyping && (
+                <div className="ai-message ai-response">
+                  <div className="message-content typing-indicator">
+                    <span>.</span><span>.</span><span>.</span>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="ai-input-container">
