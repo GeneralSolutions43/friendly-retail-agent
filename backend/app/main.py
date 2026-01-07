@@ -256,13 +256,25 @@ async def get_streaming_agent_response(message: str, tone: str) -> Generator[str
         HumanMessage(content=message),
     ]
 
-    # First invoke to check for tool calls
-    ai_msg = llm_with_tools.invoke(messages)
-    messages.append(ai_msg)
+    # First turn streaming
+    collected_ai_message = None
+    has_content = False
 
-    if ai_msg.tool_calls:
+    async for chunk in llm_with_tools.astream(messages):
+        if collected_ai_message is None:
+            collected_ai_message = chunk
+        else:
+            collected_ai_message += chunk
+        
+        if chunk.content:
+            has_content = True
+            yield f"data: {json.dumps({'response': chunk.content, 'tone': tone})}\n\n"
+
+    messages.append(collected_ai_message)
+
+    if collected_ai_message.tool_calls:
         # Process tool calls
-        for tool_call in ai_msg.tool_calls:
+        for tool_call in collected_ai_message.tool_calls:
             selected_tool_map = {
                 "search_products_tool": search_products_tool,
                 "search_products_semantic": search_products_semantic,
@@ -277,11 +289,11 @@ async def get_streaming_agent_response(message: str, tone: str) -> Generator[str
         # Stream final response after tools
         async for chunk in llm_with_tools.astream(messages):
             if chunk.content:
+                has_content = True
                 yield f"data: {json.dumps({'response': chunk.content, 'tone': tone})}\n\n"
-    else:
-        # No tool calls, stream initial content
-        if ai_msg.content:
-            yield f"data: {json.dumps({'response': ai_msg.content, 'tone': tone})}\n\n"
+    
+    if not has_content:
+        yield f"data: {json.dumps({'response': 'I encountered an issue processing that. Could you try rephrasing?', 'tone': tone})}\n\n"
 
 
 @app.get("/health")
