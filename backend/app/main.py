@@ -3,7 +3,7 @@
 import os
 import json
 import logging
-from typing import List, Generator, Literal, Any
+from typing import List, Generator, Literal, Any, Optional
 from contextlib import asynccontextmanager
 import numpy as np
 from fastapi import FastAPI, Depends, Query, HTTPException
@@ -89,6 +89,7 @@ class ChatRequest(BaseModel):
 
     message: str
     tone: Literal["Helpful Professional", "Friendly Assistant", "Expert Consultant"]
+    session_id: Optional[str] = None
 
 
 class ChatResponse(BaseModel):
