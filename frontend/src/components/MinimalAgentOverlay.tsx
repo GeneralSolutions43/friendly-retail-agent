@@ -53,7 +53,7 @@ const MinimalAgentOverlay: React.FC = () => {
 
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8002'
-      const response = await fetch(`${apiUrl}/chat`, {
+      const response = await fetch(`${apiUrl}/chat/stream`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,17 +68,58 @@ const MinimalAgentOverlay: React.FC = () => {
         throw new Error('Failed to get response from agent')
       }
 
-      const data = await response.json()
-      const responseText = data.response?.trim() || "I'm sorry, I encountered an issue processing that. Could you try rephrasing?"
-      
-      const agentMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: responseText,
-        sender: 'agent',
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      const reader = response.body?.getReader()
+      const decoder = new TextDecoder()
+      let accumulatedResponse = ''
+      const agentMessageId = (Date.now() + 1).toString()
+
+      // Create an initial empty agent message
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: agentMessageId,
+          text: '',
+          sender: 'agent',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ])
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+
+          const chunk = decoder.decode(value, { stream: true })
+          const lines = chunk.split('\n')
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6))
+                accumulatedResponse += data.response
+                
+                setMessages((prev) =>
+                  prev.map((msg) =>
+                    msg.id === agentMessageId ? { ...msg, text: accumulatedResponse } : msg
+                  )
+                )
+              } catch (e) {
+                console.error('Error parsing SSE data:', e)
+              }
+            }
+          }
+        }
       }
 
-      setMessages((prev) => [...prev, agentMessage])
+      if (!accumulatedResponse) {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === agentMessageId
+              ? { ...msg, text: "I'm sorry, I encountered an issue processing that. Could you try rephrasing?" }
+              : msg
+          )
+        )
+      }
     } catch (error) {
       console.error('Error:', error)
       const errorMessage: Message = {

@@ -2,6 +2,15 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import MinimalAgentOverlay from './MinimalAgentOverlay'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { TextDecoder, TextEncoder } from 'util'
+
+// Polyfill TextDecoder for Node environment used by Jest
+if (typeof global.TextDecoder === 'undefined') {
+  (global as any).TextDecoder = TextDecoder
+}
+if (typeof global.TextEncoder === 'undefined') {
+  (global as any).TextEncoder = TextEncoder
+}
 
 describe('MinimalAgentOverlay', () => {
   beforeEach(() => {
@@ -43,10 +52,24 @@ describe('MinimalAgentOverlay', () => {
     expect(screen.getByText(/AI Assistant/i)).toBeInTheDocument()
   })
 
-  it('sends a message and displays response', async () => {
+  it('sends a message and displays streaming response', async () => {
+    const mockChunks = [
+      'data: {"response": "Hello", "tone": "Helpful Professional"}\n\n',
+      'data: {"response": " user", "tone": "Helpful Professional"}\n\n',
+    ]
+
+    const mockReader = {
+      read: jest.fn()
+        .mockResolvedValueOnce({ done: false, value: new TextEncoder().encode(mockChunks[0]) })
+        .mockResolvedValueOnce({ done: false, value: new TextEncoder().encode(mockChunks[1]) })
+        .mockResolvedValue({ done: true }),
+    }
+
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ response: 'Hello user', tone: 'Helpful Professional' }),
+      body: {
+        getReader: () => mockReader,
+      },
     })
 
     render(<MinimalAgentOverlay />)
