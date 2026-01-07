@@ -43,24 +43,20 @@ if not GROQ_API_KEY:
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     """Create database tables on startup."""
-    print(f"--- STARTUP: Retail Agent Backend (REDIS_URL={REDIS_URL}) ---")
     with Session(engine) as session:
         session.exec(text("CREATE EXTENSION IF NOT EXISTS vector"))
         session.commit()
     SQLModel.metadata.create_all(engine)
-    
+
     # Check Redis connection
     try:
         client = get_redis_client()
         client.ping()
-        print(f"--- REDIS: Connected successfully at {REDIS_URL} ---")
         logger.info(f"Connected to Redis successfully at {REDIS_URL}")
     except Exception as e:
-        print(f"--- REDIS ERROR: {e} ---")
         logger.error(f"Failed to connect to Redis at {REDIS_URL}: {e}")
-        
-    yield
 
+    yield
 class NumpyJSONResponse(JSONResponse):
     """Custom JSONResponse that handles numpy arrays by converting them to lists."""
 
@@ -223,14 +219,6 @@ def get_agent_response(
     if session_id:
         history = get_chat_history(session_id)
         compress_history(history)
-        if history.messages:
-            logger.info(
-                f"Retrieved {len(history.messages)} messages from history for session {session_id}"
-            )
-            for msg in history.messages:
-                logger.info(f"History Msg: {msg.type}: {msg.content[:50]}...")
-        else:
-            logger.info(f"No history found for session {session_id}")
 
     llm = ChatGroq(model="openai/gpt-oss-120b", api_key=GROQ_API_KEY, temperature=0.7)
 
@@ -304,7 +292,6 @@ def get_agent_response(
 
     # Save to history if available
     if history:
-        logger.info(f"Saving new turn to history for session {session_id}")
         history.add_messages(
             [HumanMessage(content=message), AIMessage(content=content)]
         )
