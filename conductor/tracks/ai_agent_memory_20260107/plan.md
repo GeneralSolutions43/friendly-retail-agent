@@ -14,11 +14,11 @@
 - [x] Task: Add unit tests for session-based message retrieval 60c921a
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Backend - Basic Session Storage' (Protocol in workflow.md) 0288fc7
 
-## Phase 3: Backend - Summarization Logic
+## Phase 3: Backend - Summarization Logic [checkpoint: 95741f8]
 - [x] Task: Implement summarization utility using LangChain's `ConversationSummaryBufferMemory` or equivalent logic bd298bc
 - [x] Task: Integrate summarization into the chat endpoints to handle long histories 8784aa9
 - [x] Task: Add unit tests for summarization triggers and content retention 8784aa9
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Backend - Summarization Logic' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Backend - Summarization Logic' (Protocol in workflow.md) 95741f8
 
 ## Phase 4: Frontend Integration
 - [ ] Task: Implement `sessionId` generation and `localStorage` persistence in the frontend
