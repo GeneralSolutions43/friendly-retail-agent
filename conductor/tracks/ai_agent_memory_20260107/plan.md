@@ -16,8 +16,8 @@
 
 ## Phase 3: Backend - Summarization Logic
 - [x] Task: Implement summarization utility using LangChain's `ConversationSummaryBufferMemory` or equivalent logic bd298bc
-- [ ] Task: Integrate summarization into the chat endpoints to handle long histories
-- [ ] Task: Add unit tests for summarization triggers and content retention
+- [x] Task: Integrate summarization into the chat endpoints to handle long histories 8784aa9
+- [x] Task: Add unit tests for summarization triggers and content retention 8784aa9
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Backend - Summarization Logic' (Protocol in workflow.md)
 
 ## Phase 4: Frontend Integration
