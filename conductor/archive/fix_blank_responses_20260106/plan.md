@@ -24,7 +24,7 @@ Goal: Ensure product-related queries correctly trigger the semantic search tool 
 - [x] Task: Backend - Investigate and fix why the agent fails to trigger tools or generate a response when product needs are identified.
 - [x] Task: Conductor - User Manual Verification 'Fix Tool Triggering and Semantic Search' (Protocol in workflow.md)
 
-## Phase 4: Final Verification and Cleanup
+## Phase 4: Final Verification and Cleanup [checkpoint: fe15c5a]
 Goal: Ensure all reported cases are fixed and system stability is maintained.
 
 - [x] Task: Backend/Frontend - Verify all acceptance criteria from `spec.md`.

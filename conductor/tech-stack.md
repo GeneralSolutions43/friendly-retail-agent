@@ -9,6 +9,7 @@
 * **Framework:** FastAPI
 * **Language:** Python
 * **AI/ML Integration:** Llama 3 via Groq API, LangChain for agent and tool management.
+* **Vector Search:** pgvector (PostgreSQL extension), SentenceTransformers (all-MiniLM-L6-v2) for local embedding generation.
 
 ## Database & Storage
 * **Primary Database:** PostgreSQL (for structured product and user data)

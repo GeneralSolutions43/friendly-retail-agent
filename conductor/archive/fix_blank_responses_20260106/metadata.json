@@ -1,0 +1,8 @@
+{
+  "track_id": "fix_blank_responses_20260106",
+  "type": "bug",
+  "status": "new",
+  "created_at": "2026-01-06T12:00:00Z",
+  "updated_at": "2026-01-06T12:00:00Z",
+  "description": "The agent response is blank for certain questions like 'I like to listen to music when I exercise' and 'Do you have anything that will help when my muscles are sore?'"
+}
