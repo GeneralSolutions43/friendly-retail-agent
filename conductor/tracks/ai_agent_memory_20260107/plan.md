@@ -3,7 +3,7 @@
 ## Phase 1: Infrastructure & Redis Setup
 - [x] Task: Add Redis service to `docker-compose.yml` ca18ca3
 - [x] Task: Update `backend/requirements.txt` with `redis` and `langchain-redis` (if needed) 764fe34
-- [ ] Task: Create a basic Redis connection utility in the backend
+- [x] Task: Create a basic Redis connection utility in the backend 95af770
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Redis Setup' (Protocol in workflow.md)
 
 ## Phase 2: Backend - Basic Session Storage
