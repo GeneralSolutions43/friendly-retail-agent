@@ -6,13 +6,13 @@
 - [x] Task: Create a basic Redis connection utility in the backend 95af770
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Redis Setup' (Protocol in workflow.md) 3d29e81
 
-## Phase 2: Backend - Basic Session Storage
+## Phase 2: Backend - Basic Session Storage [checkpoint: 0288fc7]
 - [x] Task: Update `ChatRequest` model to include `session_id` feef224
-- [x] Task: Implement `RedisChatMessageHistory` integration in `backend/app/main.py` 54f0178
+- [x] Task: Implement `RedisChatMessageHistory` integration in `backend/app/main.py` 7e9365d
 - [x] Task: Update `get_agent_response` to retrieve and use message history 8c84b34
 - [x] Task: Update `get_streaming_agent_response` to retrieve and use message history 60c921a
 - [x] Task: Add unit tests for session-based message retrieval 60c921a
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Backend - Basic Session Storage' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Backend - Basic Session Storage' (Protocol in workflow.md) 0288fc7
 
 ## Phase 3: Backend - Summarization Logic
 - [ ] Task: Implement summarization utility using LangChain's `ConversationSummaryBufferMemory` or equivalent logic
