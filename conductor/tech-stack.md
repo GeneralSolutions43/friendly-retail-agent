@@ -7,6 +7,7 @@
 
 ## Backend
 * **Framework:** FastAPI
+* **Communication:** Server-Sent Events (SSE) for real-time streaming.
 * **Language:** Python
 * **AI/ML Integration:** Llama 3 via Groq API, LangChain for agent and tool management.
 * **Vector Search:** pgvector (PostgreSQL extension), SentenceTransformers (all-MiniLM-L6-v2) for local embedding generation.

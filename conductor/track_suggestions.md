@@ -10,7 +10,7 @@ This document tracks potential future features, improvements, and technical task
 *   **Description:** Replace mocked chat logic with a functional LLM (Llama 3 via Groq).
 *   **Goal:** Enable dynamic, conversational responses instead of static mocks.
 
-### 2. RAG Implementation (Product Knowledge)
+### 2. RAG Implementation (Product Knowledge) - [COMPLETED]
 *   **Description:** Connect the LLM to the PostgreSQL database using Retrieval-Augmented Generation.
 *   **Goal:** Enable the agent to answer specific questions about the inventory (e.g., "What are the cheapest shoes?").
 
@@ -18,7 +18,7 @@ This document tracks potential future features, improvements, and technical task
 *   **Description:** Implement session management (likely via Redis) to store message history.
 *   **Goal:** Support natural multi-turn conversations where the agent remembers context.
 
-### 4. Streaming AI Responses
+### 4. Streaming AI Responses - [COMPLETED]
 *   **Description:** Update the backend and frontend to support real-time token streaming.
 *   **Goal:** Improve the user experience by reducing perceived latency.
 
@@ -34,7 +34,7 @@ This document tracks potential future features, improvements, and technical task
 *   **Description:** Add UI filters (category, price) and a storefront search bar.
 *   **Goal:** Improve manual navigation of the product catalog.
 
-### 7. Semantic Search (Vector Search)
+### 7. Semantic Search (Vector Search) - [COMPLETED]
 *   **Description:** Implement vector embeddings for products to support "natural language" storefront search.
 *   **Goal:** Help users find "winter gear" even if the product is named "Casual Hoodie".
 
