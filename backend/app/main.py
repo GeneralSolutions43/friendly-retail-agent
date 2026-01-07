@@ -20,7 +20,7 @@ from pydantic import BaseModel
 from langchain_groq import ChatGroq
 from langchain_redis import RedisChatMessageHistory
 from langchain_core.tools import tool
-from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
+from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage, AIMessage
 from .models import Product
 from .embeddings import get_embedding
 
@@ -164,9 +164,15 @@ def search_products_semantic(query: str) -> str:
             result += f"- {p.name} ({p.category}): ${p.price}. {p.description}\n"
         return result
 
-def get_agent_response(message: str, tone: str) -> str:
+def get_agent_response(message: str, tone: str, session_id: Optional[str] = None) -> str:
     """Invoke the AI agent and return the response text."""
-    logger.info(f"Generating agent response for message: '{message}' with tone: '{tone}'")
+    logger.info(f"Generating agent response for message: '{message}' with tone: '{tone}' (session: {session_id})")
+    
+    # Get history if session_id is provided
+    history = None
+    if session_id:
+        history = get_chat_history(session_id)
+
     llm = ChatGroq(model="openai/gpt-oss-120b", api_key=GROQ_API_KEY, temperature=0.7)
 
     tools = [search_products_tool, search_products_semantic]
@@ -197,8 +203,13 @@ def get_agent_response(message: str, tone: str) -> str:
         SystemMessage(
             content=system_prompts.get(tone, system_prompts["Helpful Professional"])
         ),
-        HumanMessage(content=message),
     ]
+
+    # Add history messages if available
+    if history:
+        messages.extend(history.messages)
+
+    messages.append(HumanMessage(content=message))
 
     ai_msg = llm_with_tools.invoke(messages)
     logger.info(f"Initial AI message received: {ai_msg}")
@@ -229,6 +240,10 @@ def get_agent_response(message: str, tone: str) -> str:
     if not content or content.strip() == "":
         logger.warning(f"AI returned an empty response for message: '{message}'")
         raise ValueError("AI generated an empty response.")
+
+    # Save to history if available
+    if history:
+        history.add_messages([HumanMessage(content=message), AIMessage(content=content)])
 
     return content
 
@@ -365,7 +380,7 @@ def chat_endpoint(request: ChatRequest):
         ChatResponse: The agent's response.
     """
     try:
-        response_text = get_agent_response(request.message, request.tone)
+        response_text = get_agent_response(request.message, request.tone, request.session_id)
     except ValueError as e:
         logger.error(f"Error in chat_endpoint: {e}")
         response_text = "I'm sorry, I encountered an issue processing that. Could you try rephrasing?"
