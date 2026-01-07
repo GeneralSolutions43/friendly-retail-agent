@@ -248,9 +248,15 @@ def get_agent_response(message: str, tone: str, session_id: Optional[str] = None
     return content
 
 
-async def get_streaming_agent_response(message: str, tone: str) -> Generator[str, None, None]:
+async def get_streaming_agent_response(message: str, tone: str, session_id: Optional[str] = None) -> Generator[str, None, None]:
     """Invoke the AI agent and stream the response tokens."""
-    logger.info(f"Generating streaming agent response for message: '{message}' with tone: '{tone}'")
+    logger.info(f"Generating streaming agent response for message: '{message}' with tone: '{tone}' (session: {session_id})")
+    
+    # Get history if session_id is provided
+    history = None
+    if session_id:
+        history = get_chat_history(session_id)
+        
     llm = ChatGroq(model="openai/gpt-oss-120b", api_key=GROQ_API_KEY, temperature=0.7)
 
     tools = [search_products_tool, search_products_semantic]
@@ -281,12 +287,18 @@ async def get_streaming_agent_response(message: str, tone: str) -> Generator[str
         SystemMessage(
             content=system_prompts.get(tone, system_prompts["Helpful Professional"])
         ),
-        HumanMessage(content=message),
     ]
+
+    # Add history messages if available
+    if history:
+        messages.extend(history.messages)
+
+    messages.append(HumanMessage(content=message))
 
     # First turn streaming
     collected_ai_message = None
     has_content = False
+    full_response_content = ""
 
     async for chunk in llm_with_tools.astream(messages):
         if collected_ai_message is None:
@@ -296,6 +308,7 @@ async def get_streaming_agent_response(message: str, tone: str) -> Generator[str
         
         if chunk.content:
             has_content = True
+            full_response_content += chunk.content
             yield f"data: {json.dumps({'response': chunk.content, 'tone': tone})}\n\n"
 
     messages.append(collected_ai_message)
@@ -318,10 +331,17 @@ async def get_streaming_agent_response(message: str, tone: str) -> Generator[str
         async for chunk in llm_with_tools.astream(messages):
             if chunk.content:
                 has_content = True
+                full_response_content += chunk.content
                 yield f"data: {json.dumps({'response': chunk.content, 'tone': tone})}\n\n"
     
     if not has_content:
-        yield f"data: {json.dumps({'response': 'I encountered an issue processing that. Could you try rephrasing?', 'tone': tone})}\n\n"
+        error_msg = "I encountered an issue processing that. Could you try rephrasing?"
+        full_response_content = error_msg
+        yield f"data: {json.dumps({'response': error_msg, 'tone': tone})}\n\n"
+
+    # Save to history if available
+    if history and full_response_content:
+        history.add_messages([HumanMessage(content=message), AIMessage(content=full_response_content)])
 
 
 @app.get("/health")
@@ -392,6 +412,6 @@ def chat_endpoint(request: ChatRequest):
 async def chat_stream_endpoint(request: ChatRequest):
     """Handle chat messages with streaming response."""
     return StreamingResponse(
-        get_streaming_agent_response(request.message, request.tone),
+        get_streaming_agent_response(request.message, request.tone, request.session_id),
         media_type="text/event-stream"
     )
