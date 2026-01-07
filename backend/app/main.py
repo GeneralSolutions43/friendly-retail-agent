@@ -24,6 +24,8 @@ from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage, AI
 from .models import Product
 from .embeddings import get_embedding
 
+from .redis_client import get_redis_client
+
 # Register numpy array encoder for FastAPI's jsonable_encoder
 ENCODERS_BY_TYPE[np.ndarray] = lambda x: x.tolist()
 
@@ -44,6 +46,15 @@ async def lifespan(_: FastAPI):
         session.exec(text("CREATE EXTENSION IF NOT EXISTS vector"))
         session.commit()
     SQLModel.metadata.create_all(engine)
+    
+    # Check Redis connection
+    try:
+        client = get_redis_client()
+        client.ping()
+        logger.info(f"Connected to Redis successfully at {REDIS_URL}")
+    except Exception as e:
+        logger.error(f"Failed to connect to Redis at {REDIS_URL}: {e}")
+        
     yield
 
 
@@ -172,7 +183,13 @@ def get_agent_response(message: str, tone: str, session_id: Optional[str] = None
     history = None
     if session_id:
         history = get_chat_history(session_id)
-
+        if history.messages:
+            logger.info(f"Retrieved {len(history.messages)} messages from history for session {session_id}")
+            for msg in history.messages:
+                logger.info(f"History Msg: {msg.type}: {msg.content[:50]}...")
+        else:
+            logger.info(f"No history found for session {session_id}")
+        
     llm = ChatGroq(model="openai/gpt-oss-120b", api_key=GROQ_API_KEY, temperature=0.7)
 
     tools = [search_products_tool, search_products_semantic]
@@ -243,6 +260,7 @@ def get_agent_response(message: str, tone: str, session_id: Optional[str] = None
 
     # Save to history if available
     if history:
+        logger.info(f"Saving new turn to history for session {session_id}")
         history.add_messages([HumanMessage(content=message), AIMessage(content=content)])
 
     return content
