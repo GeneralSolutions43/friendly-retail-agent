@@ -25,6 +25,7 @@ from .models import Product
 from .embeddings import get_embedding
 
 from .redis_client import get_redis_client
+from .summarizer import summarize_messages
 
 # Register numpy array encoder for FastAPI's jsonable_encoder
 ENCODERS_BY_TYPE[np.ndarray] = lambda x: x.tolist()
@@ -124,6 +125,35 @@ def get_chat_history(session_id: str) -> RedisChatMessageHistory:
     )
 
 
+def compress_history(history: RedisChatMessageHistory, threshold: int = 10):
+    """
+    Compress conversation history if it exceeds the threshold.
+    """
+    messages = history.messages
+    if len(messages) <= threshold:
+        return
+
+    logger.info(
+        f"History threshold exceeded ({len(messages)} > {threshold}). Compressing..."
+    )
+
+    # Keep the last 4 messages (2 turns) as immediate context
+    to_summarize = messages[:-4]
+    to_keep = messages[-4:]
+
+    summary_text = summarize_messages(to_summarize)
+
+    # Update history: clear and add summary + kept messages
+    history.clear()
+
+    # Add summary as a system-noted AI message
+    summary_msg = AIMessage(
+        content=f"[System: Summary of previous conversation: {summary_text}]"
+    )
+
+    history.add_messages([summary_msg] + to_keep)
+
+
 def get_session() -> Generator[Session, None, None]:
     """Dependency to get a database session."""
     with Session(engine) as session:
@@ -192,6 +222,7 @@ def get_agent_response(
     history = None
     if session_id:
         history = get_chat_history(session_id)
+        compress_history(history)
         if history.messages:
             logger.info(
                 f"Retrieved {len(history.messages)} messages from history for session {session_id}"
@@ -293,6 +324,7 @@ async def get_streaming_agent_response(
     history = None
     if session_id:
         history = get_chat_history(session_id)
+        compress_history(history)
 
     llm = ChatGroq(model="openai/gpt-oss-120b", api_key=GROQ_API_KEY, temperature=0.7)
 
