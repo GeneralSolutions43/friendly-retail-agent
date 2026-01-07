@@ -23,12 +23,39 @@ const MinimalAgentOverlay: React.FC = () => {
       time: 'Just now',
     },
   ])
+  const [sessionId, setSessionId] = useState<string | null>(null)
   const [state, setState] = useState<OverlayState>('open')
   const [tone, setTone] = useState<Tone>('Helpful Professional')
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
   const conversationRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    // Initialize Session ID
+    let id = localStorage.getItem('retail_agent_session_id')
+    if (!id) {
+      id = crypto.randomUUID?.() || Math.random().toString(36).substring(2, 15)
+      localStorage.setItem('retail_agent_session_id', id)
+    }
+    setSessionId(id)
+
+    // Load persisted messages
+    const savedMessages = localStorage.getItem('retail_agent_messages')
+    if (savedMessages) {
+      try {
+        setMessages(JSON.parse(savedMessages))
+      } catch (e) {
+        console.error('Error loading messages from localStorage:', e)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem('retail_agent_messages', JSON.stringify(messages))
+    }
+  }, [messages])
 
   useEffect(() => {
     if (conversationRef.current) {
@@ -63,6 +90,7 @@ const MinimalAgentOverlay: React.FC = () => {
         body: JSON.stringify({
           message: currentInput,
           tone: tone,
+          session_id: sessionId,
         }),
       })
 
@@ -142,6 +170,14 @@ const MinimalAgentOverlay: React.FC = () => {
     }
   }
 
+  const handleReset = () => {
+    if (confirm('Are you sure you want to reset the conversation?')) {
+      localStorage.removeItem('retail_agent_session_id')
+      localStorage.removeItem('retail_agent_messages')
+      window.location.reload()
+    }
+  }
+
   if (state === 'dismissed') {
     return (
       <div className="ai-overlay-container">
@@ -163,6 +199,14 @@ const MinimalAgentOverlay: React.FC = () => {
       <div className={`ai-container ${state === 'minimized' ? 'minimized' : ''}`}>
         <div className="ai-header">
           <div className="ai-controls">
+            <button 
+              className="ai-control-btn" 
+              onClick={handleReset}
+              aria-label="reset conversation"
+              title="Reset Conversation"
+            >
+              ⟳
+            </button>
             <button 
               className="ai-control-btn" 
               onClick={() => setState(state === 'open' ? 'minimized' : 'open')}
