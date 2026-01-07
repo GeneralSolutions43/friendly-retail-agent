@@ -42,6 +42,7 @@ if not GROQ_API_KEY:
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     """Create database tables on startup."""
+    print(f"--- STARTUP: Retail Agent Backend (REDIS_URL={REDIS_URL}) ---")
     with Session(engine) as session:
         session.exec(text("CREATE EXTENSION IF NOT EXISTS vector"))
         session.commit()
@@ -51,12 +52,13 @@ async def lifespan(_: FastAPI):
     try:
         client = get_redis_client()
         client.ping()
+        print(f"--- REDIS: Connected successfully at {REDIS_URL} ---")
         logger.info(f"Connected to Redis successfully at {REDIS_URL}")
     except Exception as e:
+        print(f"--- REDIS ERROR: {e} ---")
         logger.error(f"Failed to connect to Redis at {REDIS_URL}: {e}")
         
     yield
-
 
 class NumpyJSONResponse(JSONResponse):
     """Custom JSONResponse that handles numpy arrays by converting them to lists."""
@@ -72,7 +74,7 @@ class NumpyJSONResponse(JSONResponse):
             ensure_ascii=False,
             allow_nan=False,
             indent=None,
-            separators=( ",", ":"),
+            separators=(",", ":"),
             default=numpy_default,
         ).encode("utf-8")
 
@@ -118,7 +120,7 @@ def get_chat_history(session_id: str) -> RedisChatMessageHistory:
     return RedisChatMessageHistory(
         session_id=session_id,
         redis_url=REDIS_URL,
-        key_prefix="retail_agent:chat_history:"
+        key_prefix="retail_agent:chat_history:",
     )
 
 
@@ -154,7 +156,7 @@ def search_products_semantic(query: str) -> str:
     """Search for products using semantic vector similarity.
 
     Use this tool when the user's query implies a meaning, theme, need, or problem (e.g., 'sore muscles', 'gift for runner', 'winter gear') rather than specific keywords.
-    
+
     Args:
         query: The search text to find semantically similar products for.
     """
@@ -162,9 +164,11 @@ def search_products_semantic(query: str) -> str:
 
     with Session(engine) as session:
         # Order by similarity (L2 distance)
-        statement = select(Product).order_by(
-            Product.embedding.l2_distance(embedding_vector)  # type: ignore
-        ).limit(5)
+        statement = (
+            select(Product)
+            .order_by(Product.embedding.l2_distance(embedding_vector))  # type: ignore
+            .limit(5)
+        )
         products = session.exec(statement).all()
 
         if not products:
@@ -175,21 +179,28 @@ def search_products_semantic(query: str) -> str:
             result += f"- {p.name} ({p.category}): ${p.price}. {p.description}\n"
         return result
 
-def get_agent_response(message: str, tone: str, session_id: Optional[str] = None) -> str:
+
+def get_agent_response(
+    message: str, tone: str, session_id: Optional[str] = None
+) -> str:
     """Invoke the AI agent and return the response text."""
-    logger.info(f"Generating agent response for message: '{message}' with tone: '{tone}' (session: {session_id})")
-    
+    logger.info(
+        f"Generating agent response for message: '{message}' with tone: '{tone}' (session: {session_id})"
+    )
+
     # Get history if session_id is provided
     history = None
     if session_id:
         history = get_chat_history(session_id)
         if history.messages:
-            logger.info(f"Retrieved {len(history.messages)} messages from history for session {session_id}")
+            logger.info(
+                f"Retrieved {len(history.messages)} messages from history for session {session_id}"
+            )
             for msg in history.messages:
                 logger.info(f"History Msg: {msg.type}: {msg.content[:50]}...")
         else:
             logger.info(f"No history found for session {session_id}")
-        
+
     llm = ChatGroq(model="openai/gpt-oss-120b", api_key=GROQ_API_KEY, temperature=0.7)
 
     tools = [search_products_tool, search_products_semantic]
@@ -240,7 +251,9 @@ def get_agent_response(message: str, tone: str, session_id: Optional[str] = None
         }
         selected_tool = selected_tool_map.get(tool_call["name"].lower())
         if selected_tool:
-            logger.info(f"Invoking tool: {tool_call['name']} with args: {tool_call['args']}")
+            logger.info(
+                f"Invoking tool: {tool_call['name']} with args: {tool_call['args']}"
+            )
             tool_output = selected_tool.invoke(tool_call["args"])
             logger.info(f"Tool output: {tool_output}")
             messages.append(ToolMessage(tool_output, tool_call_id=tool_call["id"]))
@@ -261,20 +274,26 @@ def get_agent_response(message: str, tone: str, session_id: Optional[str] = None
     # Save to history if available
     if history:
         logger.info(f"Saving new turn to history for session {session_id}")
-        history.add_messages([HumanMessage(content=message), AIMessage(content=content)])
+        history.add_messages(
+            [HumanMessage(content=message), AIMessage(content=content)]
+        )
 
     return content
 
 
-async def get_streaming_agent_response(message: str, tone: str, session_id: Optional[str] = None) -> Generator[str, None, None]:
+async def get_streaming_agent_response(
+    message: str, tone: str, session_id: Optional[str] = None
+) -> Generator[str, None, None]:
     """Invoke the AI agent and stream the response tokens."""
-    logger.info(f"Generating streaming agent response for message: '{message}' with tone: '{tone}' (session: {session_id})")
-    
+    logger.info(
+        f"Generating streaming agent response for message: '{message}' with tone: '{tone}' (session: {session_id})"
+    )
+
     # Get history if session_id is provided
     history = None
     if session_id:
         history = get_chat_history(session_id)
-        
+
     llm = ChatGroq(model="openai/gpt-oss-120b", api_key=GROQ_API_KEY, temperature=0.7)
 
     tools = [search_products_tool, search_products_semantic]
@@ -323,7 +342,7 @@ async def get_streaming_agent_response(message: str, tone: str, session_id: Opti
             collected_ai_message = chunk
         else:
             collected_ai_message += chunk
-        
+
         if chunk.content:
             has_content = True
             full_response_content += chunk.content
@@ -340,18 +359,20 @@ async def get_streaming_agent_response(message: str, tone: str, session_id: Opti
             }
             selected_tool = selected_tool_map.get(tool_call["name"].lower())
             if selected_tool:
-                logger.info(f"Invoking tool: {tool_call['name']} with args: {tool_call['args']}")
+                logger.info(
+                    f"Invoking tool: {tool_call['name']} with args: {tool_call['args']}"
+                )
                 tool_output = selected_tool.invoke(tool_call["args"])
                 logger.info(f"Tool output: {tool_output}")
                 messages.append(ToolMessage(tool_output, tool_call_id=tool_call["id"]))
-        
+
         # Stream final response after tools
         async for chunk in llm_with_tools.astream(messages):
             if chunk.content:
                 has_content = True
                 full_response_content += chunk.content
                 yield f"data: {json.dumps({'response': chunk.content, 'tone': tone})}\n\n"
-    
+
     if not has_content:
         error_msg = "I encountered an issue processing that. Could you try rephrasing?"
         full_response_content = error_msg
@@ -359,7 +380,9 @@ async def get_streaming_agent_response(message: str, tone: str, session_id: Opti
 
     # Save to history if available
     if history and full_response_content:
-        history.add_messages([HumanMessage(content=message), AIMessage(content=full_response_content)])
+        history.add_messages(
+            [HumanMessage(content=message), AIMessage(content=full_response_content)]
+        )
 
 
 @app.get("/health")
@@ -418,11 +441,13 @@ def chat_endpoint(request: ChatRequest):
         ChatResponse: The agent's response.
     """
     try:
-        response_text = get_agent_response(request.message, request.tone, request.session_id)
+        response_text = get_agent_response(
+            request.message, request.tone, request.session_id
+        )
     except ValueError as e:
         logger.error(f"Error in chat_endpoint: {e}")
         response_text = "I'm sorry, I encountered an issue processing that. Could you try rephrasing?"
-    
+
     return ChatResponse(response=response_text, tone=request.tone)
 
 
@@ -431,5 +456,5 @@ async def chat_stream_endpoint(request: ChatRequest):
     """Handle chat messages with streaming response."""
     return StreamingResponse(
         get_streaming_agent_response(request.message, request.tone, request.session_id),
-        media_type="text/event-stream"
+        media_type="text/event-stream",
     )
