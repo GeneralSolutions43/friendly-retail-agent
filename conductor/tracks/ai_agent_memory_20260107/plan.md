@@ -1,10 +1,10 @@
 # Plan: AI Agent Memory (Conversation History)
 
-## Phase 1: Infrastructure & Redis Setup
+## Phase 1: Infrastructure & Redis Setup [checkpoint: 3d29e81]
 - [x] Task: Add Redis service to `docker-compose.yml` ca18ca3
 - [x] Task: Update `backend/requirements.txt` with `redis` and `langchain-redis` (if needed) 764fe34
 - [x] Task: Create a basic Redis connection utility in the backend 95af770
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Redis Setup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Redis Setup' (Protocol in workflow.md) 3d29e81
 
 ## Phase 2: Backend - Basic Session Storage
 - [ ] Task: Update `ChatRequest` model to include `session_id`
