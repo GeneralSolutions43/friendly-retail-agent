@@ -14,7 +14,7 @@ This document tracks potential future features, improvements, and technical task
 *   **Description:** Connect the LLM to the PostgreSQL database using Retrieval-Augmented Generation.
 *   **Goal:** Enable the agent to answer specific questions about the inventory (e.g., "What are the cheapest shoes?").
 
-### 3. AI Agent Memory (Conversation History)
+### 3. AI Agent Memory (Conversation History) - [COMPLETED]
 *   **Description:** Implement session management (likely via Redis) to store message history.
 *   **Goal:** Support natural multi-turn conversations where the agent remembers context.
 

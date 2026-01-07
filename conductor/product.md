@@ -13,6 +13,7 @@ To provide online shoppers with a personalized, high-touch shopping experience t
 * **Natural Language Discovery:** Users can search for products using conversational language, making it easier to find exactly what they need.
 * **Semantic Search:** Advanced product discovery that understands the meaning of user queries (e.g., "winter gear") beyond simple keywords.
 * **Real-time Streaming:** Instant feedback with low-latency conversational responses that stream as they are generated.
+* **Conversation Memory:** Supports multi-turn interactions where the agent remembers context, preferences, and previous questions within a session.
 * **Real-time Logistics:** Instant access to inventory levels and order tracking status to keep customers informed.
 * **Personalized Recommendations:** Provides style or usage advice tailored to the user's purchase history and preferences.
 

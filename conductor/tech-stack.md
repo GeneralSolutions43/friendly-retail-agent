@@ -14,7 +14,7 @@
 
 ## Database & Storage
 * **Primary Database:** PostgreSQL (for structured product and user data)
-* **Caching/Sessions:** Redis (Inferred for efficient chat session management)
+* **Caching/Sessions:** Redis (Implemented for session-based conversation history and persistence)
 
 ## Deployment & Infrastructure (Inferred)
 * **Containerization:** Docker
