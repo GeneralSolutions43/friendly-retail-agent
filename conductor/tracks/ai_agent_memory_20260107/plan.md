@@ -7,7 +7,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Redis Setup' (Protocol in workflow.md) 3d29e81
 
 ## Phase 2: Backend - Basic Session Storage
-- [ ] Task: Update `ChatRequest` model to include `session_id`
+- [x] Task: Update `ChatRequest` model to include `session_id` feef224
 - [ ] Task: Implement `RedisChatMessageHistory` integration in `backend/app/main.py`
 - [ ] Task: Update `get_agent_response` to retrieve and use message history
 - [ ] Task: Update `get_streaming_agent_response` to retrieve and use message history
