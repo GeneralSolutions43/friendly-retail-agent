@@ -7,6 +7,7 @@ from typing import List, Generator, Literal, Any
 from contextlib import asynccontextmanager
 import numpy as np
 from fastapi import FastAPI, Depends, Query, HTTPException
+from fastapi.responses import JSONResponse, StreamingResponse
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -219,6 +220,70 @@ def get_agent_response(message: str, tone: str) -> str:
     return content
 
 
+async def get_streaming_agent_response(message: str, tone: str) -> Generator[str, None, None]:
+    """Invoke the AI agent and stream the response tokens."""
+    logger.info(f"Generating streaming agent response for message: '{message}' with tone: '{tone}'")
+    llm = ChatGroq(model="openai/gpt-oss-120b", api_key=GROQ_API_KEY, temperature=0.7)
+
+    tools = [search_products_tool, search_products_semantic]
+    llm_with_tools = llm.bind_tools(tools)
+
+    system_prompts = {
+        "Helpful Professional": (
+            "You are a helpful and professional retail assistant. "
+            "Provide clear, concise, and accurate information. "
+            "Use the available tools to search for product details. "
+            "Always acknowledge the user's input and provide a helpful response, even if no products are found or searched."
+        ),
+        "Friendly Assistant": (
+            "You are a super friendly and enthusiastic retail assistant! "
+            "Use emojis, be warm, and make the customer feel excited about their shopping journey. "
+            "Always check our product catalog using tools if needed. "
+            "Even if you don't find a product, always chat back and acknowledge what the user said with enthusiasm!"
+        ),
+        "Expert Consultant": (
+            "You are a highly knowledgeable retail expert and consultant. "
+            "Provide deep insights, detailed product comparisons, and curated advice. "
+            "Analyze product data from the tools carefully before responding. "
+            "Always provide a thoughtful acknowledgment of the user's statements or preferences."
+        ),
+    }
+
+    messages = [
+        SystemMessage(
+            content=system_prompts.get(tone, system_prompts["Helpful Professional"])
+        ),
+        HumanMessage(content=message),
+    ]
+
+    # First invoke to check for tool calls
+    ai_msg = llm_with_tools.invoke(messages)
+    messages.append(ai_msg)
+
+    if ai_msg.tool_calls:
+        # Process tool calls
+        for tool_call in ai_msg.tool_calls:
+            selected_tool_map = {
+                "search_products_tool": search_products_tool,
+                "search_products_semantic": search_products_semantic,
+            }
+            selected_tool = selected_tool_map.get(tool_call["name"].lower())
+            if selected_tool:
+                logger.info(f"Invoking tool: {tool_call['name']} with args: {tool_call['args']}")
+                tool_output = selected_tool.invoke(tool_call["args"])
+                logger.info(f"Tool output: {tool_output}")
+                messages.append(ToolMessage(tool_output, tool_call_id=tool_call["id"]))
+        
+        # Stream final response after tools
+        async for chunk in llm_with_tools.astream(messages):
+            if chunk.content:
+                yield f"data: {json.dumps({'response': chunk.content, 'tone': tone})}\n\n"
+    else:
+        # No tool calls, stream initial content
+        if ai_msg.content:
+            yield f"data: {json.dumps({'response': ai_msg.content, 'tone': tone})}\n\n"
+
+
 @app.get("/health")
 async def health_check() -> dict[str, str]:
     """Check the health status of the application.
@@ -281,3 +346,12 @@ def chat_endpoint(request: ChatRequest):
         response_text = "I'm sorry, I encountered an issue processing that. Could you try rephrasing?"
     
     return ChatResponse(response=response_text, tone=request.tone)
+
+
+@app.post("/chat/stream")
+async def chat_stream_endpoint(request: ChatRequest):
+    """Handle chat messages with streaming response."""
+    return StreamingResponse(
+        get_streaming_agent_response(request.message, request.tone),
+        media_type="text/event-stream"
+    )
