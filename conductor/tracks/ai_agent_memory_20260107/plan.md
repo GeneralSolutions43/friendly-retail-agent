@@ -11,7 +11,7 @@
 - [x] Task: Implement `RedisChatMessageHistory` integration in `backend/app/main.py` 54f0178
 - [x] Task: Update `get_agent_response` to retrieve and use message history 8c84b34
 - [x] Task: Update `get_streaming_agent_response` to retrieve and use message history 60c921a
-- [ ] Task: Add unit tests for session-based message retrieval
+- [x] Task: Add unit tests for session-based message retrieval 60c921a
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Backend - Basic Session Storage' (Protocol in workflow.md)
 
 ## Phase 3: Backend - Summarization Logic
