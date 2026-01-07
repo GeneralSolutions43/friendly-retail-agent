@@ -1,6 +1,12 @@
-from app.main import ChatRequest
+import sys
+import os
 import pytest
 from pydantic import ValidationError
+
+# Ensure backend is in path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../backend')))
+
+from app.main import ChatRequest
 
 def test_chat_request_with_session_id():
     request = ChatRequest(message="hello", tone="Friendly Assistant", session_id="test-session")
